@@ -1,4 +1,13 @@
 {
   "name": "bitter",
-  "packageManager": "yarn@4.2.2"
+  "packageManager": "yarn@4.2.2",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "workspaces/*"
+    ]
+  },
+  "scripts": {
+    "dev": "yarn workspace bitter-chat dev"
+  }
 }
