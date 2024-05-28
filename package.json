@@ -9,5 +9,8 @@
   },
   "scripts": {
     "dev": "yarn workspace bitter-chat dev"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5"
   }
 }
