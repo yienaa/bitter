@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { Toolbar } from '@/app/components/Toolbar';
 import { RoomList } from '@/app/components/RoomList';
 import { Room } from '@/app/components/Room';

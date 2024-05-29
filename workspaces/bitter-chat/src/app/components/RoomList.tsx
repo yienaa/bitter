@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Toolbar } from '@/app/components/Toolbar';
 import { IRoom, StylePropsComponent } from '@/app/types/common';
 
 const test = [
@@ -12,7 +11,7 @@ const test = [
   {
     id: 2,
     name: '홍길동2대화',
-    recent: '안녕하세요',
+    recent: '안녕하세요!!!!!',
     time: '오후 2:30',
   },
   {

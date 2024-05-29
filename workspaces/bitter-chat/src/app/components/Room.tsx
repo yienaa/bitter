@@ -7,13 +7,13 @@ const test = [
   {
     id: 1,
     user: '홍길동1',
-    message: '안녕하세요',
+    message: '안녕하세욥!',
     time: '오후 2:30',
   },
   {
     id: 2,
     user: '홍길동2',
-    message: '안녕하세요',
+    message: '안녕하세용',
     time: '오후 2:30',
   },
 ];
