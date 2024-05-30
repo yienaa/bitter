@@ -5,15 +5,15 @@ interface StyleClass {
 }
 
 export interface IMessage {
-  id: number;
+  id: string;
   user: string;
   message: string;
   time: string;
 }
 
 export interface IRoom {
-  id: number;
+  id: string;
   name: string;
-  recent: string;
-  time: string;
+  time?: string;
+  recent?: string;
 }

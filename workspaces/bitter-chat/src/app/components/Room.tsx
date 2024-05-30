@@ -1,25 +1,16 @@
 import { IMessage } from '@/app/types/common';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Message } from '@/app/components/Message';
 import { Editor } from '@/app/components/Editor';
 
-const test = [
-  {
-    id: 1,
-    user: '홍길동1',
-    message: '안녕하세욥!',
-    time: '오후 2:30',
-  },
-  {
-    id: 2,
-    user: '홍길동2',
-    message: '안녕하세용',
-    time: '오후 2:30',
-  },
-];
-
 export function Room({ className }: StylePropsComponent) {
-  const [messageList, setMessageList] = useState<IMessage[]>(test);
+  const [messageList, setMessageList] = useState<IMessage[]>([]);
+
+  useEffect(() => {
+    fetch(' http://localhost:8000/api/messages')
+      .then((res) => res.json())
+      .then((data) => setMessageList(data.reverse()));
+  }, []);
 
   return (
     <div className={`${className} tw-w-full tw-h-full tw-flex tw-flex-col`}>
