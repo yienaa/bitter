@@ -9,7 +9,8 @@
   },
   "scripts": {
     "dev": "yarn workspace bitter-chat dev",
-    "server": "node workspaces/bitter-chat/src/app/server/index.js"
+    "server": "node workspaces/bitter-chat/src/app/server/index.js",
+    "dev-study": "yarn workspace study dev"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
