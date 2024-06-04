@@ -1,17 +1,7 @@
 'use client';
 
-import { Toolbar } from '@/app/components/Toolbar';
-import { RoomList } from '@/app/components/RoomList';
-import { Room } from '@/app/components/Room';
+import React from 'react';
 
-export default function ChatHome() {
-  return (
-    <div className='tw-w-full tw-h-full tw-flex tw-flex-col tw-overflow-hidden'>
-      <Toolbar />
-      <section className='tw-h-full tw-flex'>
-        <RoomList className='tw-border-r-2' />
-        <Room className='tw-flex-1' />
-      </section>
-    </div>
-  );
+export default function Home() {
+  return <div className='tw-w-full tw-h-full tw-flex tw-flex-col tw-overflow-hidden'>아무것도음스요</div>;
 }

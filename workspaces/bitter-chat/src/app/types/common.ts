@@ -1,4 +1,4 @@
-export type StylePropsComponent<T> = T & StyleClass;
+export type StylePropsComponent<T = any> = T & StyleClass;
 
 interface StyleClass {
   className: string;
@@ -14,6 +14,6 @@ export interface IMessage {
 export interface IRoom {
   id: string;
   name: string;
-  time?: string;
+  time: number;
   recent?: string;
 }

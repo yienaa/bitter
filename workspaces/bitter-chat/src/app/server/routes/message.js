@@ -35,7 +35,7 @@ router.post('/', (req, res) => {
     id: crypto.randomUUID(),
     user: req.body.user,
     message: req.body.message,
-    time: new Date().toDateString(),
+    time: new Date().toISOString(),
   };
   messages.push(newMessage);
   res.status(201).json(newMessage);

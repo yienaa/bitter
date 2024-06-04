@@ -4,7 +4,8 @@ export function Editor({ className }: StylePropsComponent) {
   return (
     <input
       type='text'
-      className='tw-flex-1'
+      className='tw-w-full tw-p-2 tw-rounded-full tw-border tw-border-gray-300 tw-outline-none tw-box-border'
+      placeholder='입력하세요...'
     />
   );
 }

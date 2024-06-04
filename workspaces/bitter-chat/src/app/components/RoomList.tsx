@@ -1,29 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IRoom, StylePropsComponent } from '@/app/types/common';
+import Link from 'next/link';
+import BitterDate from '@/app/utils/date';
 
-const test = [
-  {
-    id: 1,
-    name: '홍길동1대화',
-    recent: '안녕하세요',
-    time: '오후 2:30',
-  },
-  {
-    id: 2,
-    name: '홍길동2대화',
-    recent: '안녕하세요!!!!!',
-    time: '오후 2:30',
-  },
-  {
-    id: 3,
-    name: '홍길동3대화',
-    recent: '안녕하세요',
-    time: '오후 2:30',
-  },
-];
+export function RoomList({ className }: StylePropsComponent<null>) {
+  const [chatList, setChatList] = useState<IRoom[]>([]);
 
-export function RoomList({ className }: StylePropsComponent) {
-  const [chatList, setChatList] = useState<IRoom[]>(test);
+  useEffect(() => {
+    fetch('http://localhost:8000/api/room')
+      .then((res) => res.json())
+      .then((data) => setChatList(data.reverse()));
+  }, []);
+
   return (
     <div className={`${className} tw-h-full`}>
       <ul className=''>
@@ -38,18 +26,20 @@ export function RoomList({ className }: StylePropsComponent) {
   );
 }
 
-function RoomItem({ recent, time, name }: IRoom) {
+function RoomItem({ recent, time, name, id }: IRoom) {
   return (
-    <li className='tw-p-4 tw-border-b tw-border-gray-200'>
-      <div className='tw-flex tw-justify-between tw-items-center'>
-        <div>
-          <p className='tw-text-lg tw-font-bold'>{name}</p>
-          <p className='tw-text-sm tw-text-gray-500'>{recent}</p>
+    <Link href={`/${id}`}>
+      <li className='tw-p-4 tw-border-b tw-border-gray-200'>
+        <div className='tw-flex tw-justify-between tw-items-center'>
+          <div>
+            <p className='tw-text-lg tw-font-bold'>{name}</p>
+            <p className='tw-text-sm tw-text-gray-500'>{recent}</p>
+          </div>
+          <div>
+            <p className='tw-text-sm tw-text-gray-500'>{BitterDate(time)}</p>
+          </div>
         </div>
-        <div>
-          <p className='tw-text-sm tw-text-gray-500'>{time}</p>
-        </div>
-      </div>
-    </li>
+      </li>
+    </Link>
   );
 }

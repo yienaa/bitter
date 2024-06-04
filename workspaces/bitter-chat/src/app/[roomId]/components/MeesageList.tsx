@@ -1,13 +1,11 @@
 import { IMessage, StylePropsComponent } from '@/app/types/common';
 import { useState, useEffect } from 'react';
-import { Message } from '@/app/components/Message';
-import { Editor } from '@/app/components/Editor';
+import { Message } from '@/app/[roomId]/components/Message';
 
 export function MessageList({ className, roomId }: StylePropsComponent<any>) {
   const [messageList, setMessageList] = useState<IMessage[]>([]);
 
   useEffect(() => {
-    console.error(123123);
     fetch(' http://localhost:8000/api/messages')
       .then((res) => res.json())
       .then((data) => setMessageList(data.reverse()));
