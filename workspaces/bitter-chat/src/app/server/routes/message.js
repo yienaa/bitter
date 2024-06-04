@@ -35,10 +35,13 @@ router.post('/', (req, res) => {
     id: crypto.randomUUID(),
     user: req.body.user,
     message: req.body.message,
-    time: req.body.time,
+    time: new Date().toDateString(),
   };
   messages.push(newMessage);
   res.status(201).json(newMessage);
+
+  // socket.io 인스턴스를 사용하여 'message created' 이벤트 방출
+  req.app.io.emit('message:create', newMessage);
 });
 
 // Update a message

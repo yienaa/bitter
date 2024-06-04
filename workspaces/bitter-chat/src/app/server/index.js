@@ -14,19 +14,27 @@ const handle = app.getRequestHandler();
 
 const server = express();
 const httpServer = http.createServer(server);
-const io = socketIo(httpServer);
+const io = socketIo(httpServer, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  },
+});
 
 io.on('connection', (socket) => {
   console.log('a user connected');
 
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
+  socket.on('createMessage', (msg) => {
+    io.emit('create chat message', msg);
   });
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
 });
+
+// 라우터에서 사용하기 위해 소켓 등록
+server.io = io;
 
 server.use(bodyParser.json());
 server.use(cors({ origin: 'http://localhost:3000' })); // CORS 설정
