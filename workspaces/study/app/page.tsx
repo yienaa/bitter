@@ -1,11 +1,7 @@
 'use client';
 
+import React from "react";
 
-export default function Home() {
-  return (
-      <div>하이이이</div>
-  );
-}
 
 
 // 상태는 컴포넌트 외부 어딘가에 두고 여러 컴포넌트가 같이 쓰여야한다
@@ -18,3 +14,78 @@ type Store<State> = {
     set: (action: Initializer<State>) => State;
     subscribe: (callback: () => void) => () => void;
 }
+
+export const createStore = <State extends unknown>(
+    initialState: Initializer<State>
+): Store<State> => {
+    let state: State = typeof initialState === 'function' ? (initialState as () => State)() : initialState;
+
+    const callbacks: Set<() => void> = new Set<() => void>();
+
+    const get = () => state;
+    const set = (nextState: State | ((prev: State) => State)): State => {
+        state = typeof nextState === 'function' ? (nextState as (prev: State) => State)(state) : nextState;
+        callbacks.forEach(callback => callback());
+
+        return state;
+    }
+
+    const subscribe = (callback: () => void) => {
+        callbacks.add(callback);
+
+        return () => {
+            callbacks.delete(callback);
+        }
+    }
+
+    return {get, set, subscribe};
+}
+
+export const useStore = <State extends unknown>(store: Store<State>) => {
+    const [state, setState] = React.useState(() => store.get());
+
+    React.useEffect(() => {
+        const unsubscribe = store.subscribe(() => {
+            setState(store.get());
+        });
+        return unsubscribe;
+    }, [store]);
+
+    return [state, store.set] as const;
+}
+
+export const useStoreSelector = <State extends unknown, Value extends unknown>(
+    store: Store<State>,
+    selector: (state: State) => Value
+) => {
+    const [state, setState] = React.useState(() => selector(store.get()));
+
+    React.useEffect(() => {
+        const unsubscribe = store.subscribe(() => {
+            setState(selector(store.get()));
+        });
+        return unsubscribe;
+    }, [store, selector]);
+
+    return state;
+}
+
+// usage
+
+const store: Store<{count: number}> = createStore({count: 0});
+
+export default function Home() {
+    const [state, setState] = useStore(store);
+
+    function handleIncrement() {
+        setState((prev) => ({count: prev.count + 1}));
+    }
+
+    return (
+        <div className="w-full h-8 flex flex-col">
+            <h1>하이잉 : {state.count}</h1>
+            <button onClick={handleIncrement}>눌러봥</button>
+        </div>
+    );
+}
+
