@@ -4,19 +4,19 @@ const router = express.Router();
 
 let rooms = [
   {
-    id: crypto.randomUUID(),
+    id: 'a12345',
     name: '월요일대화',
     recent: '안녕하세요, 월요일',
     time: new Date().toISOString(),
   },
   {
-    id: crypto.randomUUID(),
+    id: 'b123345',
     name: '화요일은 커피',
     recent: '오더프레소가자',
     time: new Date().toISOString(),
   },
   {
-    id: crypto.randomUUID(),
+    id: 'c123345',
     name: '수요일은 재택',
     recent: '늦잠자야지',
     time: new Date().toISOString(),

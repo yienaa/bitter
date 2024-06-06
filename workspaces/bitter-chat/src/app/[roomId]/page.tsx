@@ -2,13 +2,24 @@
 
 import { MessageList } from '@/app/[roomId]/components/MeesageList';
 import { Editor } from '@/app/[roomId]/components/Editor';
-import { useSocket } from '@/app/hooks/useSocket';
+import { useContext, useEffect, useState } from 'react';
+import { IMessage } from '@/app/types/common';
+import { useRoomSocket } from '@/app/hooks/useRoomSocket';
+import { SocketContext } from '@/app/hooks/useSocket';
 
-export default function Room() {
-  const socket = useSocket('http://localhost:8000');
+export default function Room({ params }: { params: { roomId: string } }) {
+  const globalSocket = useContext(SocketContext);
+  const socket = useRoomSocket(globalSocket, params.roomId);
+  const [roomId, setRoomId] = useState<string>('');
+  const [messageList, setMessageList] = useState<IMessage[]>([]);
+
+  useEffect(() => {
+    setRoomId(params.roomId);
+  }, [params.roomId]);
 
   function createMessage() {
     const body = {
+      roomId,
       user: '레나',
       message: '안녕하세요안뇨아아아아뇬뇨앙욘',
     };

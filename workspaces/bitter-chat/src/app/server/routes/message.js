@@ -39,9 +39,8 @@ router.post('/', (req, res) => {
   };
   messages.push(newMessage);
   res.status(201).json(newMessage);
-
   // socket.io 인스턴스를 사용하여 'message created' 이벤트 방출
-  req.app.io.emit('message:create', newMessage);
+  req.app.io.to(req.body.roomId).emit('room:createMsg', newMessage);
 });
 
 // Update a message

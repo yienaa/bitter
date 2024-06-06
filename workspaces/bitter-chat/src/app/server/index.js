@@ -1,7 +1,6 @@
 const express = require('express');
 const next = require('next');
 const http = require('http');
-const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -14,24 +13,8 @@ const handle = app.getRequestHandler();
 
 const server = express();
 const httpServer = http.createServer(server);
-const io = socketIo(httpServer, {
-  cors: {
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST'],
-  },
-});
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
-
-  socket.on('createMessage', (msg) => {
-    io.emit('create chat message', msg);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
+const setupSocket = require('./sockets/index'); // socket.js 파일 임포트
+const io = setupSocket(httpServer); // 소켓 설정
 
 // 라우터에서 사용하기 위해 소켓 등록
 server.io = io;
