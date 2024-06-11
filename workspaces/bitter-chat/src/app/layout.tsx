@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <SocketContext.Provider value={socket}>
+        <SocketContext.Provider value={socket.current}>
           <div className='tw-w-full tw-h-full tw-flex tw-flex-col tw-overflow-hidden'>
             <Toolbar />
             <section className='tw-h-full tw-flex'>

@@ -15,7 +15,6 @@ const server = express();
 const httpServer = http.createServer(server);
 const setupSocket = require('./sockets/index'); // socket.js 파일 임포트
 const io = setupSocket(httpServer); // 소켓 설정
-
 // 라우터에서 사용하기 위해 소켓 등록
 server.io = io;
 
@@ -32,5 +31,6 @@ server.all('*', (req, res) => {
 
 httpServer.listen(8000, (err) => {
   if (err) throw err;
+
   console.log('> Ready on http://localhost:8000');
 });
