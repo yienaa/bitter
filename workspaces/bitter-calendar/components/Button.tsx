@@ -68,14 +68,20 @@ const styles = {
   `,
 };
 
+const DefaultButtonProps = {
+  size: UI_SIZE.MEDIUM,
+  color: UI_COLOR.PRIMARY,
+  variant: UI_VARIANT.FILLED,
+};
+
 const StyledButton = styled.button<ButtonProps>`
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
 
-  ${({ size }) => sizes[size || 'medium']}
-  ${({ color }) => colors[color || 'primary']}
-  ${({ variant }) => styles[variant || 'filled']}
+  ${({ size }) => sizes[size || DefaultButtonProps.size]}
+  ${({ color }) => colors[color || DefaultButtonProps.color]}
+  ${({ variant }) => styles[variant || DefaultButtonProps.variant]}
 `;
 
 export default function Button({
@@ -93,7 +99,7 @@ export default function Button({
       color={color}
       variant={variant}
       onClick={onClick}
-      disabled={disabled}
+      disabled={!!disabled}
     >
       {icon}
       {label}
