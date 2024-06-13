@@ -1,7 +1,13 @@
 import React from 'react';
-import App from './src/App';
+import App from './components/App';
 import { createRoot } from 'react-dom/client';
+import GlobalStyle from './GlobalStyle';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
-root.render(<App />);
+root.render(
+  <>
+    <GlobalStyle />
+    <App />
+  </>,
+);
