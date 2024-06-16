@@ -1,7 +1,8 @@
 import React from 'react';
-import Button from './Button';
+import Button from '../ui/Button';
 import styled from 'styled-components';
 import { UI_COLOR } from '../types/style';
+import Input from '../ui/Input';
 
 const ControllButtons = styled.div`
   padding: 10px;
@@ -9,19 +10,19 @@ const ControllButtons = styled.div`
   justify-content: space-between;
 `;
 
-const NavigationButtonWrapper = styled.div`
+const ButtonGroup = styled.div`
   display: flex;
   justify-content: space-between;
 
-  & > div {
-    margin: 0 10px;
+  button {
+    margin: 0 5px;
   }
 `;
 export default function CalendarHeader(): React.ReactElement {
   return (
     <ControllButtons>
       <Button label='오늘' />
-      <NavigationButtonWrapper>
+      <ButtonGroup>
         <Button
           label='이전'
           color={UI_COLOR.SECONDARY}
@@ -34,7 +35,7 @@ export default function CalendarHeader(): React.ReactElement {
           label='다음'
           color={UI_COLOR.SECONDARY}
         />
-      </NavigationButtonWrapper>
+      </ButtonGroup>
       <Button label='단위' />
     </ControllButtons>
   );

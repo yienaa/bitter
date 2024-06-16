@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import React from 'react';
 import { UI_COLOR, UI_SIZE, UI_VARIANT, UiColor, UiSize, UiVariant } from '../types/style';
+import Icon from './Icon';
 
 interface ButtonProps {
   label?: string;
@@ -9,7 +10,7 @@ interface ButtonProps {
   size?: UiSize;
   color?: UiColor;
   variant?: UiVariant;
-  icon?: React.ReactNode;
+  iconClass?: string;
 }
 
 const sizes = {
@@ -91,7 +92,7 @@ export default function Button({
   size,
   color,
   variant,
-  icon,
+  iconClass,
 }: ButtonProps): React.ReactElement {
   return (
     <StyledButton
@@ -101,7 +102,7 @@ export default function Button({
       onClick={onClick}
       disabled={!!disabled}
     >
-      {icon}
+      {iconClass && <Icon className={iconClass} />}
       {label}
     </StyledButton>
   );
