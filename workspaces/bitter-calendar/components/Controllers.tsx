@@ -18,7 +18,7 @@ const ButtonGroup = styled.div`
     margin: 0 5px;
   }
 `;
-export default function CalendarHeader(): React.ReactElement {
+export default function Controllers(): React.ReactElement {
   return (
     <ControllButtons>
       <Button label='오늘' />
