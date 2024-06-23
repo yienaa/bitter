@@ -2,12 +2,13 @@ import React from 'react';
 import Button from '../ui/Button';
 import styled from 'styled-components';
 import { UI_COLOR } from '../types/style';
-import Input from '../ui/Input';
+import { colors } from '../styles/theme';
 
 const ControllButtons = styled.div`
   padding: 10px;
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid ${colors.border};
 `;
 
 const ButtonGroup = styled.div`

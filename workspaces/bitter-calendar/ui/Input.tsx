@@ -1,10 +1,11 @@
 import styled from 'styled-components';
+import { colors } from '../styles/theme';
 
 const Input = styled.input`
   width: 100%;
   padding: 5px 10px;
   box-sizing: border-box;
-  border: 1px solid #ccc;
+  border: 1px solid ${colors.border};
   border-radius: 4px;
   font-size: 16px;
   transition: border-color 0.3s ease;

@@ -25,7 +25,12 @@ module.exports = {
       {
         test: /\.(tsx|ts)?$/,
         use: 'ts-loader',
-        exclude: '/node_modules/',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.(css|scss)$/g,
+        use: ['style-loader', 'css-loader'],
+        exclude: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'styles/icons/demo-files')],
       },
     ],
   },

@@ -63,39 +63,7 @@ export default function Calendar(): React.ReactElement {
     ></Week>
   ));
 
-  const [scrollClosingDirection, setScrollClosingDirection] = useState<'top' | 'bottom' | null>(null);
-  const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | null>(null);
-
-  useEffect(() => {
-    console.error(scrollClosingDirection, scrollDirection);
-  }, [scrollClosingDirection, scrollDirection]);
-
-  function test(e: React.WheelEvent<HTMLDivElement>) {
-    if (e.deltaY < 0) {
-      setScrollDirection('up');
-    } else {
-      setScrollDirection('down');
-    }
-  }
-  function scroll(e: React.UIEvent<HTMLDivElement>) {
-    const target = e.target as HTMLDivElement;
-    if (target.scrollTop < 100) {
-      setScrollClosingDirection('top');
-    } else if (target.scrollHeight - target.clientHeight - target.scrollTop < 100) {
-      setScrollClosingDirection('bottom');
-    } else {
-      setScrollClosingDirection(null);
-    }
-  }
-
-  return (
-    <Wrapper
-      onWheel={test}
-      onScroll={scroll}
-    >
-      {testWeek}
-    </Wrapper>
-  );
+  return <Wrapper>{testWeek}</Wrapper>;
 }
 
 interface DragInfo {

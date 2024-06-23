@@ -17,14 +17,35 @@ const sizes = {
   [UI_SIZE.SMALL]: css`
     font-size: 12px;
     padding: 8px 12px;
+
+    & > ${Icon} {
+      display: inline-block;
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
   `,
   [UI_SIZE.MEDIUM]: css`
     font-size: 14px;
     padding: 10px 16px;
+
+    & > ${Icon} {
+      display: inline-block;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
   `,
   [UI_SIZE.LARGE]: css`
     font-size: 16px;
     padding: 12px 20px;
+
+    & > ${Icon} {
+      display: inline-block;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
   `,
 };
 

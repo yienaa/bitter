@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import Day from './Day';
+import { colors } from '../../styles/theme';
 const DayWrapper = styled.div`
   width: 100%;
   height: 100%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid ${colors.border};
 `;
 
 export default function Week({ index: pIndex }: any): React.ReactElement {
