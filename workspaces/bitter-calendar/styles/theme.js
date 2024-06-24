@@ -9,4 +9,5 @@ export const colors = {
   background: '#ecf0f1',
   text: '#2c3e50',
   border: '#ccc',
+  placeholder: '#999',
 };
