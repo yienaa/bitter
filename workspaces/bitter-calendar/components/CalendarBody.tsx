@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Week from './calendar/Week';
+import Controllers from './calendar/Controllers';
 
 function baseCalendar() {
   const today = new Date();
@@ -9,6 +10,7 @@ function baseCalendar() {
   const weeks = getWeeksInMonth(year, month);
   console.error(weeks);
 }
+
 const getToday = () => {
   const today = new Date();
   return {
@@ -29,7 +31,7 @@ const getWeeksInMonth = (year: number, month: number) => {
   return Math.ceil(used / 7);
 };
 
-// export default function Calendar(): React.ReactElement {
+// export default function CalendarBody(): React.ReactElement {
 //   const [weeksInMonth, setWeeksInMonth] = useState(0);
 //
 //   useEffect(() => {
@@ -44,6 +46,7 @@ const Wrapper = styled.div`
   height: 100%;
   overflow-y: scroll;
   scroll-behavior: smooth;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -55,7 +58,7 @@ const Wrapper = styled.div`
 
 const WeekWrapper = styled.div``;
 
-export default function Calendar(): React.ReactElement {
+export default function CalendarBody(): React.ReactElement {
   const testWeek = Array.from({ length: 36 }).map((_, index) => (
     <Week
       key={window.crypto.randomUUID()}
@@ -63,7 +66,12 @@ export default function Calendar(): React.ReactElement {
     ></Week>
   ));
 
-  return <Wrapper>{testWeek}</Wrapper>;
+  return (
+    <>
+      <Controllers />
+      <Wrapper>{testWeek}</Wrapper>
+    </>
+  );
 }
 
 interface DragInfo {
@@ -101,6 +109,7 @@ interface WeekInfo {
   firstDayOfWeek: DayInfo;
   lastDayOfWeek: DayInfo;
 }
+
 interface Calendar {
   today: Today;
   focusedMonth: MonthInfo;

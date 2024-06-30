@@ -1,8 +1,8 @@
 import React from 'react';
-import Button from '../ui/Button';
+import Button from '../../ui/Button';
 import styled from 'styled-components';
-import { UI_COLOR } from '../types/style';
-import { colors } from '../styles/theme';
+import { UI_COLOR } from '../../types/style';
+import { colors } from '../../styles/theme';
 
 const ControllButtons = styled.div`
   padding: 10px;
