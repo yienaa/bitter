@@ -2,6 +2,9 @@
 import styled from 'styled-components';
 
 const Icon = styled.i`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: 'icomoon' !important;
   speak: never;
   font-style: normal;

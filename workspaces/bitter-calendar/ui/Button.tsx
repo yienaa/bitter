@@ -16,7 +16,8 @@ interface ButtonProps {
 const sizes = {
   [UI_SIZE.SMALL]: css`
     font-size: 12px;
-    padding: 8px 12px;
+    padding: 4px 8px;
+    height: 24px;
 
     & > ${Icon} {
       display: inline-block;
@@ -27,7 +28,8 @@ const sizes = {
   `,
   [UI_SIZE.MEDIUM]: css`
     font-size: 14px;
-    padding: 10px 16px;
+    padding: 6px 12px;
+    height: 32px;
 
     & > ${Icon} {
       display: inline-block;
@@ -38,7 +40,8 @@ const sizes = {
   `,
   [UI_SIZE.LARGE]: css`
     font-size: 16px;
-    padding: 12px 20px;
+    padding: 8px 16px;
+    height: 40px;
 
     & > ${Icon} {
       display: inline-block;
@@ -51,7 +54,8 @@ const sizes = {
 
 const colors = {
   [UI_COLOR.PRIMARY]: css`
-    background-color: #6200ea; /* Material Deep Purple */
+    --main-color: #6200ea; /* Vivid Purple */
+    background-color: #6200ea;
     color: white;
 
     &:hover {
@@ -59,19 +63,21 @@ const colors = {
     }
   `,
   [UI_COLOR.SECONDARY]: css`
-    background-color: #03dac5; /* Material Teal */
+    --main-color: #757575; /* Cool Gray */
+    background-color: var(--main-color);
     color: white;
 
     &:hover {
-      background-color: #018786;
+      background-color: #cccccc;
     }
   `,
   [UI_COLOR.DANGER]: css`
-    background-color: #b00020; /* Material Red */
+    --main-color: #f44336; /* Vivid Purple */
+    background-color: #f44336;
     color: white;
 
     &:hover {
-      background-color: #790000;
+      background-color: #d32f2f;
     }
   `,
 };
@@ -82,11 +88,13 @@ const styles = {
   `,
   [UI_VARIANT.OUTLINED]: css`
     background-color: transparent;
-    border: 2px solid currentColor;
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
   `,
   [UI_VARIANT.TEXT]: css`
     background-color: transparent;
     border: none;
+    color: var(--main-color);
   `,
 };
 
@@ -100,6 +108,7 @@ const StyledButton = styled.button<ButtonProps>`
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
+  box-sizing: border-box;
 
   ${({ size }) => sizes[size || DefaultButtonProps.size]}
   ${({ color }) => colors[color || DefaultButtonProps.color]}

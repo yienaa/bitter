@@ -1,13 +1,14 @@
 import React from 'react';
 import Button from '../../ui/Button';
 import styled from 'styled-components';
-import { UI_COLOR } from '../../types/style';
+import { UI_COLOR, UI_VARIANT } from '../../types/style';
 import { colors } from '../../styles/theme';
 
 const ControllButtons = styled.div`
   padding: 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid ${colors.border};
 `;
 
@@ -25,15 +26,15 @@ export default function Controllers(): React.ReactElement {
       <Button label='오늘' />
       <ButtonGroup>
         <Button
-          label='이전'
+          iconClass='icon-chevron-left'
+          variant={UI_VARIANT.OUTLINED}
           color={UI_COLOR.SECONDARY}
         />
-        <div>
-          <Button label='2021년' />
-          <Button label='5월' />
-        </div>
+        <Button label='2021년' />
+        <Button label='5월' />
         <Button
-          label='다음'
+          iconClass='icon-chevron-right'
+          variant={UI_VARIANT.OUTLINED}
           color={UI_COLOR.SECONDARY}
         />
       </ButtonGroup>
