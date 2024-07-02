@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { colors } from '../../styles/theme';
+import { DayInfo } from './models';
 
 const DayWrapper = styled.div`
   &:not(:last-child) {
@@ -8,10 +9,13 @@ const DayWrapper = styled.div`
   }
 `;
 
-export default function Day({ index, pIndex }: any): React.ReactElement {
+interface DayProps {
+  day: DayInfo;
+}
+export default function Day({ day }: DayProps): React.ReactElement {
   return (
     <DayWrapper>
-      {pIndex} ::: {index}
+      {day.month} ::: {day.date}
     </DayWrapper>
   );
 }

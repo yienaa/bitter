@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Week from './calendar/Week';
 import Controllers from './calendar/Controllers';
 import useToday from './calendar/hooks/useToday';
 import userMonth from './calendar/hooks/useMonth';
 import useMonth from './calendar/hooks/useMonth';
+import { generate6Weeks } from './calendar/utils/weekInfo';
+import { WeekInfo } from './calendar/models';
 
 function baseCalendar() {
   const today = new Date();
@@ -44,19 +46,21 @@ const Wrapper = styled.div`
 `;
 
 export default function CalendarBody(): React.ReactElement {
-  const today = useToday();
-  const month = useMonth();
-  const weeks = Array.from({ length: 6 }).map((_, index) => (
+  const { year, month } = useToday();
+  // TODO virtualInfinityScroll 사용을 위해 size 6로 유지해야함
+  const weeks: WeekInfo[] = generate6Weeks(year, month);
+
+  const createWeeks = weeks?.map((week: WeekInfo, index) => (
     <Week
-      key={window.crypto.randomUUID()}
-      index={index}
-    ></Week>
+      key={week.key}
+      week={week}
+    />
   ));
 
   return (
     <>
       <Controllers />
-      <Wrapper>{weeks}</Wrapper>
+      <Wrapper>{createWeeks}</Wrapper>
     </>
   );
 }

@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Day from './Day';
 import { colors } from '../../styles/theme';
+import { DayInfo, WeekInfo } from './models';
+import { generate7Days } from './utils/dayInfo';
+
 const DayWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -10,13 +13,18 @@ const DayWrapper = styled.div`
   border-bottom: 1px solid ${colors.border};
 `;
 
-export default function Week({ index: pIndex }: any): React.ReactElement {
-  const testWeek = Array.from({ length: 7 }).map((_, index) => (
+interface WeekProps {
+  week: WeekInfo;
+}
+
+export default function Week({ week }: WeekProps): React.ReactElement {
+  const days: DayInfo[] = generate7Days(week.firstDayOfWeek);
+  console.error(days);
+  const createDays = days.map((day) => (
     <Day
-      key={index}
-      index={index}
-      pIndex={pIndex}
-    ></Day>
+      key={day.key}
+      day={day}
+    />
   ));
-  return <DayWrapper>{testWeek}</DayWrapper>;
+  return <DayWrapper>{createDays}</DayWrapper>;
 }

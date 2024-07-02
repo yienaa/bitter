@@ -12,16 +12,6 @@ export interface Today {
   date: number;
 }
 
-export interface DayInfo {
-  day: number;
-  isToday: boolean;
-  isHoliday: boolean;
-  isPrevMonth: boolean;
-  isNextMonth: boolean;
-  weekOnMonth: number;
-  isoString: ISOZeroDateString;
-}
-
 export interface MonthInfo {
   month: number;
   year: number;
@@ -30,9 +20,26 @@ export interface MonthInfo {
   prevMonthLastDate: number;
 }
 
+export interface DayInfo {
+  key: string;
+  year: number;
+  month: number; // 0 ~ 11
+  date: number; // 1 ~ 31
+  day: number; // 0 ~ 6
+  isToday: boolean;
+  isHoliday: boolean;
+  isPrevMonth: boolean;
+  isNextMonth: boolean;
+  weekOnMonth: number;
+  isoString: ISOZeroDateString;
+}
+
 export interface WeekInfo {
+  key: string;
+  year: number;
+  month: number;
+  weekOfMonth: number;
   firstDayOfWeek: DayInfo;
-  lastDayOfWeek: DayInfo;
 }
 
 export interface Calendar {
