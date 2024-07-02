@@ -6,6 +6,7 @@ export function calculateDayInfo(isoString?: ISODateString): DayInfo {
   const isToday = day.toDateString() === today.toDateString();
   const isHoliday = day.getDay() === 0 || day.getDay() === 6;
   const weekOnMonth = Math.floor((day.getDate() - 1) / 7) + 1;
+  const isoStringDate = new Date(day.setUTCHours(0, 0, 0, 0));
 
   return {
     day: day.getDate(),
@@ -14,6 +15,6 @@ export function calculateDayInfo(isoString?: ISODateString): DayInfo {
     isPrevMonth: false,
     isNextMonth: false,
     weekOnMonth,
-    isoString: day.toISOString(),
+    isoString: isoStringDate.toISOString(),
   };
 }

@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
 
-export default function userMonth() {
-  const [month, setMonth] = useState(new Date());
+export default function useMonth() {
+  const [month, setMonth] = useState();
 
-  useEffect(() => {
-    const today = new Date();
-    setMonth(today);
-  }, []);
+  useEffect(() => {}, []);
 
-  return month;
+  return [month, setMonth];
 }

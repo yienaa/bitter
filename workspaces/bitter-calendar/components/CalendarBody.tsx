@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Week from './calendar/Week';
 import Controllers from './calendar/Controllers';
+import useToday from './calendar/hooks/useToday';
+import userMonth from './calendar/hooks/useMonth';
+import useMonth from './calendar/hooks/useMonth';
 
 function baseCalendar() {
   const today = new Date();
@@ -31,16 +34,6 @@ const getWeeksInMonth = (year: number, month: number) => {
   return Math.ceil(used / 7);
 };
 
-// export default function CalendarBody(): React.ReactElement {
-//   const [weeksInMonth, setWeeksInMonth] = useState(0);
-//
-//   useEffect(() => {
-//     const today = getToday();
-//     setWeeksInMonth(getWeeksInMonth(today.year, today.month));
-//   }, []);
-//   return <div></div>;
-// }
-
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -50,9 +43,9 @@ const Wrapper = styled.div`
   }
 `;
 
-const WeekWrapper = styled.div``;
-
 export default function CalendarBody(): React.ReactElement {
+  const today = useToday();
+  const month = useMonth();
   const weeks = Array.from({ length: 6 }).map((_, index) => (
     <Week
       key={window.crypto.randomUUID()}
