@@ -16,8 +16,6 @@ export interface MonthInfo {
   month: number;
   year: number;
   weeksInMonth: number;
-  firstDayOfMonth: number;
-  prevMonthLastDate: number;
 }
 
 export interface DayInfo {

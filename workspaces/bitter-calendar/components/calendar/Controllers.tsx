@@ -6,6 +6,8 @@ import { colors } from '../../styles/theme';
 import useToday from './hooks/useToday';
 import { TodayContext } from './contexts/TodayContext';
 import { getMonthFormat } from './utils/i18n';
+import { MonthContext } from './contexts/MonthContext';
+import { calculateMonthInfo } from './utils/monthInfo';
 
 const ControllButtons = styled.div`
   padding: 10px;
@@ -25,25 +27,24 @@ const ButtonGroup = styled.div`
 `;
 export default function Controllers(): React.ReactElement {
   const today = useContext(TodayContext);
-  console.error(today, getMonthFormat(today.dateObject));
+  const { month, setMonth } = useContext(MonthContext);
 
-  const nextMonth = () => {
-    const nextMonth = new Date(today.dateObject);
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
-    return nextMonth;
-  };
+  function nextMonth() {
+    setMonth(calculateMonthInfo(month.year, month.month + 1));
+  }
+  function prevMonth() {
+    setMonth(calculateMonthInfo(month.year, month.month - 1));
+  }
 
   return (
     <ControllButtons>
-      <Button
-        label='오늘'
-        onClick={nextMonth}
-      />
+      <Button label='오늘' />
       <ButtonGroup>
         <Button
           iconClass='icon-chevron-left'
           variant={UI_VARIANT.OUTLINED}
           color={UI_COLOR.SECONDARY}
+          onClick={prevMonth}
         />
         <Button label={today.year} />
         <Button label={getMonthFormat(today.dateObject)} />
@@ -51,6 +52,7 @@ export default function Controllers(): React.ReactElement {
           iconClass='icon-chevron-right'
           variant={UI_VARIANT.OUTLINED}
           color={UI_COLOR.SECONDARY}
+          onClick={nextMonth}
         />
       </ButtonGroup>
       <Button label='단위' />
