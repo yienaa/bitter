@@ -4,7 +4,7 @@ import { UI_COLOR, UI_SIZE, UI_VARIANT, UiColor, UiSize, UiVariant } from '../ty
 import Icon from './Icon';
 
 interface ButtonProps {
-  label?: string;
+  label?: string | number;
   onClick?: () => void;
   disabled?: boolean;
   size?: UiSize;

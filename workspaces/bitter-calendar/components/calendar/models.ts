@@ -32,6 +32,7 @@ export interface DayInfo {
   isNextMonth: boolean;
   weekOnMonth: number;
   isoString: ISOZeroDateString;
+  dateObject: Date;
 }
 
 export interface WeekInfo {

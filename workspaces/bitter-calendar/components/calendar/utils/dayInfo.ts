@@ -13,7 +13,7 @@ export function calculateDayInfo(isoString?: ISODateString): DayInfo {
   const isoStringDate = new Date(day.setUTCHours(0, 0, 0, 0));
 
   return {
-    key: `${year}-${month}-${date}`,
+    key: `${year}-${month + 1}-${date}`,
     year,
     month,
     date,
@@ -24,6 +24,7 @@ export function calculateDayInfo(isoString?: ISODateString): DayInfo {
     isNextMonth: false,
     weekOnMonth,
     isoString: isoStringDate.toISOString(),
+    dateObject: day,
   };
 }
 

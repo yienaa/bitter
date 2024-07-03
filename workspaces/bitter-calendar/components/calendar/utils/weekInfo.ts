@@ -5,7 +5,7 @@ export function weekInfo(year: number, month: number, week: number): WeekInfo | 
   const firstDayOfWeek = getFirstDayOfWeek(year, month, week);
 
   return {
-    key: `${year}-${month}-${week}`,
+    key: `${year}-${month + 1}+${week}`,
     year,
     month,
     weekOfMonth: week,
@@ -28,10 +28,9 @@ export function generate6Weeks(year: number, month: number): WeekInfo[] {
     const restCount = 6 - weeksInMonth;
     const nextMonth = month + 1;
     const nextYear = nextMonth === 12 ? year + 1 : year;
-    const nextMonthIndex = nextMonth % 12;
 
     for (let i = 1; i <= restCount; i++) {
-      const week = weekInfo(nextYear, nextMonthIndex, i);
+      const week = weekInfo(nextYear, nextMonth, i);
       if (week) {
         weeks.push(week);
       }
@@ -66,10 +65,12 @@ export function getWeeksCountInMonth(year: number, month: number): number {
 export function getFirstDayOfWeek(year: number, month: number, week: number): DayInfo {
   const firstDayOfMonth = new Date(year, month, 1).getDay();
   const prevMonthLastDate = new Date(year, month, 0).getDate();
-  const firstDayOfWeek = (week - 1) * 7 - firstDayOfMonth + 1;
-  const date = firstDayOfWeek > 0 ? firstDayOfWeek : prevMonthLastDate;
+  const date = 1 + (week - 1) * 7 - firstDayOfMonth;
+  const monthToUse = date <= 0 ? month - 1 : month;
+  const yearToUse = monthToUse === -1 ? year - 1 : year;
+  const dateToUse = date <= 0 ? prevMonthLastDate + date : date;
 
-  return calculateDayInfo(new Date(year, month, date).toISOString());
+  return calculateDayInfo(new Date(yearToUse, monthToUse, dateToUse).toISOString());
 }
 
 // /**
