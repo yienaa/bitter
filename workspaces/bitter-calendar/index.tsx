@@ -1,5 +1,5 @@
 import React from 'react';
-import App from './components/App';
+import App from './src/App';
 import GlobalStyle from './GlobalStyle';
 import { createRoot } from 'react-dom/client';
 import { theme } from './styles/theme';

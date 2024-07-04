@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { colors } from '../../styles/theme';
-import { DayInfo } from './models';
-import { getDateFormat, getMonthFormat } from './utils/i18n';
+import { DayInfo } from '../types/calendar';
+import { getDateFormat, getMonthFormat } from '../utils/i18n';
 
 const DayWrapper = styled.div<DayProps>`
   &:not(:last-child) {

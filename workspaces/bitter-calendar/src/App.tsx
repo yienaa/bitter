@@ -1,9 +1,8 @@
 import React from 'react';
-import CalendarBody from './CalendarBody';
-import CalendarHeader from './CalendarHeader';
 import AppLayout from './AppLayout';
-import CalendarNav from './CalendarNav';
-
+import CalendarHeader from './calendar/CalendarHeader';
+import CalendarNav from './calendar/CalendarNav';
+import CalendarBody from './calendar/CalendarBody';
 export default function App(): React.ReactElement {
   return (
     <AppLayout

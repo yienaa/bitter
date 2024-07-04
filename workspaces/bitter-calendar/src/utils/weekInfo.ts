@@ -1,4 +1,4 @@
-import { DayInfo, WeekInfo } from '../models';
+import { DayInfo, WeekInfo } from '../types/calendar';
 import { calculateDayInfo } from './dayInfo';
 
 export function weekInfo(year: number, month: number, week: number): WeekInfo | null {

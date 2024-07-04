@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, WheelEvent } from 'react';
 import styled from 'styled-components';
-import Week from './calendar/Week';
-import Controllers from './calendar/Controllers';
-import useToday from './calendar/hooks/useToday';
-import { generate6Weeks } from './calendar/utils/weekInfo';
-import { WeekInfo } from './calendar/models';
-import { TodayContext } from './calendar/contexts/TodayContext';
-import { MonthContext } from './calendar/contexts/MonthContext';
-import useMonth from './calendar/hooks/useMonth';
+import Controllers from './Controllers';
+import Week from './Week';
+import { WeekInfo } from '../types/calendar';
+import { generate6Weeks } from '../utils/weekInfo';
+import { TodayContext } from '../contexts/TodayContext';
+import { CurrentContext } from '../contexts/CurrentContext';
+import useToday from '../hooks/useToday';
+import useCurrent from '../hooks/useCurrent';
 
 function baseCalendar() {
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth();
   const weeks = getWeeksInMonth(year, month);
-  console.error(weeks);
 }
 
 const getToday = () => {
@@ -37,7 +36,7 @@ const getWeeksInMonth = (year: number, month: number) => {
   return Math.ceil(used / 7);
 };
 
-const Wrapper = styled.div`
+const WeekWrapper = styled.div`
   width: 100%;
   height: 100%;
 
@@ -46,30 +45,39 @@ const Wrapper = styled.div`
   }
 `;
 
+const BodyWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 export default function CalendarBody(): React.ReactElement {
   const today = useToday();
-  const [month, setMonth] = useMonth();
+  const [month, setMonth] = useCurrent();
   const [weeks, setWeeks] = useState<WeekInfo[]>(generate6Weeks(today.year, today.month));
 
   useEffect(() => {
+    // TODO virtualInfinityScroll 사용을 위해 size 6로 유지해야함
     setWeeks(generate6Weeks(month.year, month.month));
   }, [month]);
 
-  // TODO virtualInfinityScroll 사용을 위해 size 6로 유지해야함
+  const navigate = (event: WheelEvent<HTMLDivElement>) => {
+    console.error(event.deltaY);
+  };
 
   return (
     <TodayContext.Provider value={today}>
-      <MonthContext.Provider value={{ month, setMonth }}>
-        <Controllers />
-        <Wrapper>
-          {weeks.map((week) => (
-            <Week
-              key={week.key}
-              week={week}
-            />
-          ))}
-        </Wrapper>
-      </MonthContext.Provider>
+      <CurrentContext.Provider value={{ current: month, setCurrent: setMonth }}>
+        <BodyWrapper onWheel={navigate}>
+          <Controllers />
+          <WeekWrapper>
+            {weeks.map((week) => (
+              <Week
+                key={week.key}
+                week={week}
+              />
+            ))}
+          </WeekWrapper>
+        </BodyWrapper>
+      </CurrentContext.Provider>
     </TodayContext.Provider>
   );
 }

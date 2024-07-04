@@ -1,7 +1,7 @@
 import React from 'react';
+import styled from 'styled-components';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
-import styled from 'styled-components';
 
 const Wrapper = styled.div`
   width: 100%;

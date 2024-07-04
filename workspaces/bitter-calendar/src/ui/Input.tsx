@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { colors } from '../styles/theme';
 import React from 'react';
 import Icon from './Icon';
+import { colors } from '../../styles/theme';
 
 interface InputProps {
   placeholder: string;

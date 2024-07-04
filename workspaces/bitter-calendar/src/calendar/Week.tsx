@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import Day from './Day';
 import { colors } from '../../styles/theme';
-import { DayInfo, WeekInfo } from './models';
-import { generate7Days } from './utils/dayInfo';
+import { DayInfo, WeekInfo } from '../types/calendar';
+import { generate7Days } from '../utils/dayInfo';
 
 const DayWrapper = styled.div`
   width: 100%;
@@ -19,7 +19,6 @@ interface WeekProps {
 
 export default function Week({ week }: WeekProps): React.ReactElement {
   const days: DayInfo[] = generate7Days(week.firstDayOfWeek);
-  console.error(days);
   const createDays = days.map((day) => (
     <Day
       key={day.key}

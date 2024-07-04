@@ -12,10 +12,11 @@ export interface Today {
   date: number;
 }
 
-export interface MonthInfo {
+export interface CurrentInfo {
   month: number;
   year: number;
   weeksInMonth: number;
+  dateObject: Date;
 }
 
 export interface DayInfo {
@@ -39,11 +40,6 @@ export interface WeekInfo {
   month: number;
   weekOfMonth: number;
   firstDayOfWeek: DayInfo;
-}
-
-export interface Calendar {
-  today: Today;
-  focusedMonth: MonthInfo;
 }
 
 export type ISODateString = string; // "2011-10-05T14:48:00.000Z"

@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
-import Button from '../../ui/Button';
 import styled from 'styled-components';
-import { UI_COLOR, UI_VARIANT } from '../../types/style';
 import { colors } from '../../styles/theme';
-import useToday from './hooks/useToday';
-import { TodayContext } from './contexts/TodayContext';
-import { getMonthFormat } from './utils/i18n';
-import { MonthContext } from './contexts/MonthContext';
-import { calculateMonthInfo } from './utils/monthInfo';
+import Button from '../ui/Button';
+import { UI_COLOR, UI_VARIANT } from '../types/style';
+import { TodayContext } from '../contexts/TodayContext';
+import { CurrentContext } from '../contexts/CurrentContext';
+import { calculateCurrentInfo } from '../utils/currentInfo';
+import { getMonthFormat, getYearFormat } from '../utils/i18n';
 
 const ControllButtons = styled.div`
   padding: 10px;
@@ -27,18 +26,25 @@ const ButtonGroup = styled.div`
 `;
 export default function Controllers(): React.ReactElement {
   const today = useContext(TodayContext);
-  const { month, setMonth } = useContext(MonthContext);
+  const { current, setCurrent } = useContext(CurrentContext);
 
   function nextMonth() {
-    setMonth(calculateMonthInfo(month.year, month.month + 1));
+    setCurrent(calculateCurrentInfo(current.year, current.month + 1));
   }
   function prevMonth() {
-    setMonth(calculateMonthInfo(month.year, month.month - 1));
+    setCurrent(calculateCurrentInfo(current.year, current.month - 1));
+  }
+
+  function goToday() {
+    setCurrent(calculateCurrentInfo(today.year, today.month));
   }
 
   return (
     <ControllButtons>
-      <Button label='오늘' />
+      <Button
+        label='오늘'
+        onClick={goToday}
+      />
       <ButtonGroup>
         <Button
           iconClass='icon-chevron-left'
@@ -46,8 +52,8 @@ export default function Controllers(): React.ReactElement {
           color={UI_COLOR.SECONDARY}
           onClick={prevMonth}
         />
-        <Button label={today.year} />
-        <Button label={getMonthFormat(today.dateObject)} />
+        <Button label={getYearFormat(current.dateObject)} />
+        <Button label={getMonthFormat(current.dateObject)} />
         <Button
           iconClass='icon-chevron-right'
           variant={UI_VARIANT.OUTLINED}

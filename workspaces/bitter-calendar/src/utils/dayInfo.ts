@@ -1,4 +1,4 @@
-import { DayInfo, ISODateString } from '../models';
+import { DayInfo, ISODateString } from '../types/calendar';
 
 export function calculateDayInfo(isoString?: ISODateString): DayInfo {
   const day = new Date(isoString || new Date().toISOString());
