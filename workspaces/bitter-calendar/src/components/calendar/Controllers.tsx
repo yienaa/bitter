@@ -27,13 +27,6 @@ const ButtonGroup = styled.div`
 export default function Controllers(): React.ReactElement {
   const today = useContext(TodayContext);
   const { current, setCurrent } = useContext(CurrentContext);
-  const [displayedYear, setDisplayedYear] = useState(getYearFormat(current.dateObject));
-  const [displayedMonth, setDisplayedMonth] = useState(getMonthFormat(current.dateObject));
-
-  useEffect(() => {
-    setDisplayedYear(getYearFormat(current.dateObject));
-    setDisplayedMonth(getMonthFormat(current.dateObject));
-  }, [current]);
 
   function nextMonth() {
     setCurrent(calculateCurrentInfo(current.year, current.month + 1));
@@ -60,8 +53,8 @@ export default function Controllers(): React.ReactElement {
           color={UI_COLOR.SECONDARY}
           onClick={prevMonth}
         />
-        <Button label={displayedYear} />
-        <Button label={displayedMonth} />
+        <Button label={getYearFormat(current.dateObject)} />
+        <Button label={getMonthFormat(current.dateObject)} />
         <Button
           iconClass='icon-chevron-right'
           variant={UI_VARIANT.OUTLINED}
