@@ -2,7 +2,6 @@ import { CurrentInfo } from '../types/calendar';
 import { getWeeksCountInMonth } from './weekInfo';
 
 // TODO month > 12 혹은 그 반대인 케이스 계싼
-
 export function calculateCurrentInfo(
   year: number = new Date().getFullYear(),
   month: number = new Date().getMonth(),
@@ -19,6 +18,6 @@ export function calculateCurrentInfo(
     month,
     year,
     weeksInMonth: getWeeksCountInMonth(year, month),
-    dateObject: new Date(year, month),
+    dateObject: new Date(year, month, 1),
   };
 }

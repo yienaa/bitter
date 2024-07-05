@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Day from './Day';
-import { colors } from '../../styles/theme';
-import { DayInfo, WeekInfo } from '../types/calendar';
-import { generate7Days } from '../utils/dayInfo';
+import { colors } from '../../../styles/theme';
+import { DayInfo, WeekInfo } from '../../types/calendar';
+import { generate7Days } from '../../utils/dayInfo';
 
 const DayWrapper = styled.div`
   width: 100%;
