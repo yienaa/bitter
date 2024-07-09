@@ -8,6 +8,8 @@ import { TodayContext } from '../contexts/TodayContext';
 import { CurrentContext } from '../contexts/CurrentContext';
 import useToday from '../hooks/useToday';
 import useCurrent from '../hooks/useCurrent';
+import { EventContext } from '../contexts/EventContext';
+import { useEvent } from '../hooks/useEvent';
 
 function baseCalendar() {
   const today = new Date();
@@ -51,7 +53,8 @@ const BodyWrapper = styled.div`
 `;
 export default function CalendarBody(): React.ReactElement {
   const today = useToday();
-  const [month, setMonth] = useCurrent();
+  const [month, setCurrent] = useCurrent();
+  const [event, eventDispatch] = useEvent();
   const [weeks, setWeeks] = useState<WeekInfo[]>(generate6Weeks(today.year, today.month));
 
   useEffect(() => {
@@ -65,19 +68,21 @@ export default function CalendarBody(): React.ReactElement {
 
   return (
     <TodayContext.Provider value={today}>
-      <CurrentContext.Provider value={{ current: month, setCurrent: setMonth }}>
-        <BodyWrapper onWheel={navigate}>
-          <Controllers />
-          <WeekWrapper>
-            {weeks.map((week) => (
-              <Week
-                key={week.key}
-                week={week}
-              />
-            ))}
-          </WeekWrapper>
-        </BodyWrapper>
-      </CurrentContext.Provider>
+      <EventContext.Provider value={{ event: null, eventDispatch }}>
+        <CurrentContext.Provider value={{ current: month, setCurrent }}>
+          <BodyWrapper onWheel={navigate}>
+            <Controllers />
+            <WeekWrapper>
+              {weeks.map((week) => (
+                <Week
+                  key={week.key}
+                  week={week}
+                />
+              ))}
+            </WeekWrapper>
+          </BodyWrapper>
+        </CurrentContext.Provider>
+      </EventContext.Provider>
     </TodayContext.Provider>
   );
 }

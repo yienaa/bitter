@@ -1,10 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../styles/theme';
-import { DayInfo } from '../types/calendar';
+import { DayInfo, ISODateString } from '../types/calendar';
 import { getDateFormat, getMonthFormat } from '../utils/i18n';
 import { Simulate } from 'react-dom/test-utils';
 import dragOver = Simulate.dragOver;
+import { EventContext } from '../contexts/EventContext';
+import { CalendarEvent } from '../types/event';
+import { EVENT_DISPATCH_TYPE } from '../hooks/useEvent';
 
 export const EMPTY_IMAGE = new Image(1, 1);
 EMPTY_IMAGE.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
@@ -29,16 +32,26 @@ const DayWrapper = styled.div<DayProps>`
 interface DayProps {
   day: DayInfo;
 }
+
 export default function Day({ day }: DayProps): React.ReactElement {
+  const { event, eventDispatch } = useContext(EventContext);
+
   function dragStart(e: React.DragEvent<HTMLDivElement>) {
+    e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setDragImage(EMPTY_IMAGE, 0, 0);
     e.dataTransfer.setData('startDate', day.isoString);
-    console.log('dragStart', e, e.dataTransfer.getData('startDate'));
   }
 
   function dragEnd(e: React.DragEvent<HTMLDivElement>) {
-    console.log(day.isoString);
-    console.log(e, 'dragEnd', e.dataTransfer.getData('startDate'));
+    const newEvent: CalendarEvent = {
+      id: window.crypto.randomUUID(),
+      isTemp: false,
+      title: 'New Event',
+      start: e.dataTransfer.getData('startDate'),
+      end: day.isoString,
+      allDay: true,
+    };
+    eventDispatch({ type: EVENT_DISPATCH_TYPE.TEMP, payload: newEvent });
   }
 
   function dragOver(e: React.DragEvent<HTMLDivElement>) {
