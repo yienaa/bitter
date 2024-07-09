@@ -1,12 +1,10 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../../styles/theme';
-import { DayInfo, ISODateString } from '../../types/calendar';
+import { DayInfo } from '../../types/calendar';
 import { getDateFormat, getMonthFormat } from '../../utils/i18n';
-import { Simulate } from 'react-dom/test-utils';
-import dragOver = Simulate.dragOver;
 import { EventContext } from '../../contexts/EventContext';
-import { CalendarEvent } from '../../types/event';
+import { CalendarEventBase } from '../../types/event';
 import { EVENT_DISPATCH_TYPE } from '../../hooks/useEvent';
 
 export const EMPTY_IMAGE = new Image(1, 1);
@@ -43,7 +41,7 @@ export default function Day({ day }: DayProps): React.ReactElement {
   }
 
   function dragEnd(e: React.DragEvent<HTMLDivElement>) {
-    const newEvent: CalendarEvent = {
+    const newEvent: CalendarEventBase = {
       id: window.crypto.randomUUID(),
       isTemp: false,
       title: 'New Event',
