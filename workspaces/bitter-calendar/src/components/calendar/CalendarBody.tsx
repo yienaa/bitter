@@ -2,14 +2,16 @@ import React, { useEffect, useState, WheelEvent } from 'react';
 import styled from 'styled-components';
 import Controllers from './Controllers';
 import Week from './Week';
-import { WeekInfo } from '../types/calendar';
-import { generate6Weeks } from '../utils/weekInfo';
-import { TodayContext } from '../contexts/TodayContext';
-import { CurrentContext } from '../contexts/CurrentContext';
-import useToday from '../hooks/useToday';
-import useCurrent from '../hooks/useCurrent';
-import { EventContext } from '../contexts/EventContext';
-import { useEvent } from '../hooks/useEvent';
+import { WeekInfo } from '../../types/calendar';
+import { TodayContext } from '../../contexts/TodayContext';
+import { CurrentContext } from '../../contexts/CurrentContext';
+import { EventContext } from '../../contexts/EventContext';
+import { useEvent } from '../../hooks/useEvent';
+import { generate6Weeks } from '../../utils/weekInfo';
+import useToday from '../../hooks/useToday';
+import useCurrent from '../../hooks/useCurrent';
+import useDebounce from '../../hooks/useDebounce';
+import { calculateCurrentInfo } from '../../utils/currentInfo';
 
 function baseCalendar() {
   const today = new Date();
@@ -17,15 +19,6 @@ function baseCalendar() {
   const month = today.getMonth();
   const weeks = getWeeksInMonth(year, month);
 }
-
-const getToday = () => {
-  const today = new Date();
-  return {
-    year: today.getFullYear(),
-    month: today.getMonth(),
-    date: today.getDate(),
-  };
-};
 
 const getWeeksInMonth = (year: number, month: number) => {
   const firstDay = new Date(year, month, 1);
@@ -53,24 +46,33 @@ const BodyWrapper = styled.div`
 `;
 export default function CalendarBody(): React.ReactElement {
   const today = useToday();
-  const [month, setCurrent] = useCurrent();
+  const [current, setCurrent] = useCurrent();
   const [event, eventDispatch] = useEvent();
   const [weeks, setWeeks] = useState<WeekInfo[]>(generate6Weeks(today.year, today.month));
+  const [deltaY, setDeltaY] = useState(0);
+  const debounce = useDebounce<number>(deltaY);
 
   useEffect(() => {
     // TODO virtualInfinityScroll 사용을 위해 size 6로 유지해야함
-    setWeeks(generate6Weeks(month.year, month.month));
-  }, [month]);
+    setWeeks(generate6Weeks(current.year, current.month));
+  }, [current]);
 
-  const navigate = (event: WheelEvent<HTMLDivElement>) => {
-    console.error(event.deltaY);
-  };
+  useEffect(() => {
+    if (debounce === 0) return;
+    if (debounce > 0) {
+      setCurrent(calculateCurrentInfo(current.year, current.month + 1));
+    } else {
+      setCurrent(calculateCurrentInfo(current.year, current.month - 1));
+    }
+  }, [debounce]);
+
+  const onWheelEvent = (event: WheelEvent<HTMLDivElement>) => setDeltaY(event.deltaY);
 
   return (
     <TodayContext.Provider value={today}>
       <EventContext.Provider value={{ event: null, eventDispatch }}>
-        <CurrentContext.Provider value={{ current: month, setCurrent }}>
-          <BodyWrapper onWheel={navigate}>
+        <CurrentContext.Provider value={{ current: current, setCurrent: setCurrent }}>
+          <BodyWrapper onWheel={onWheelEvent}>
             <Controllers />
             <WeekWrapper>
               {weeks.map((week) => (

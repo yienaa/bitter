@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { colors } from '../../styles/theme';
-import Button from '../ui/Button';
-import { UI_COLOR, UI_VARIANT } from '../types/style';
-import { TodayContext } from '../contexts/TodayContext';
-import { CurrentContext } from '../contexts/CurrentContext';
-import { calculateCurrentInfo } from '../utils/currentInfo';
-import { getMonthFormat, getYearFormat } from '../utils/i18n';
+import { colors } from '../../../styles/theme';
+import Button from '../../ui/Button';
+import { UI_COLOR, UI_VARIANT } from '../../types/style';
+import { TodayContext } from '../../contexts/TodayContext';
+import { CurrentContext } from '../../contexts/CurrentContext';
+import { calculateCurrentInfo } from '../../utils/currentInfo';
+import { getMonthFormat, getYearFormat } from '../../utils/i18n';
 
 const ControllButtons = styled.div`
   padding: 10px;
@@ -27,10 +27,18 @@ const ButtonGroup = styled.div`
 export default function Controllers(): React.ReactElement {
   const today = useContext(TodayContext);
   const { current, setCurrent } = useContext(CurrentContext);
+  const [displayedYear, setDisplayedYear] = useState(getYearFormat(current.dateObject));
+  const [displayedMonth, setDisplayedMonth] = useState(getMonthFormat(current.dateObject));
+
+  useEffect(() => {
+    setDisplayedYear(getYearFormat(current.dateObject));
+    setDisplayedMonth(getMonthFormat(current.dateObject));
+  }, [current]);
 
   function nextMonth() {
     setCurrent(calculateCurrentInfo(current.year, current.month + 1));
   }
+
   function prevMonth() {
     setCurrent(calculateCurrentInfo(current.year, current.month - 1));
   }
@@ -52,8 +60,8 @@ export default function Controllers(): React.ReactElement {
           color={UI_COLOR.SECONDARY}
           onClick={prevMonth}
         />
-        <Button label={getYearFormat(current.dateObject)} />
-        <Button label={getMonthFormat(current.dateObject)} />
+        <Button label={displayedYear} />
+        <Button label={displayedMonth} />
         <Button
           iconClass='icon-chevron-right'
           variant={UI_VARIANT.OUTLINED}

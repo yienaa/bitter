@@ -1,13 +1,13 @@
 import React, { useContext, useRef } from 'react';
 import styled from 'styled-components';
-import { colors } from '../../styles/theme';
-import { DayInfo, ISODateString } from '../types/calendar';
-import { getDateFormat, getMonthFormat } from '../utils/i18n';
+import { colors } from '../../../styles/theme';
+import { DayInfo, ISODateString } from '../../types/calendar';
+import { getDateFormat, getMonthFormat } from '../../utils/i18n';
 import { Simulate } from 'react-dom/test-utils';
 import dragOver = Simulate.dragOver;
-import { EventContext } from '../contexts/EventContext';
-import { CalendarEvent } from '../types/event';
-import { EVENT_DISPATCH_TYPE } from '../hooks/useEvent';
+import { EventContext } from '../../contexts/EventContext';
+import { CalendarEvent } from '../../types/event';
+import { EVENT_DISPATCH_TYPE } from '../../hooks/useEvent';
 
 export const EMPTY_IMAGE = new Image(1, 1);
 EMPTY_IMAGE.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
