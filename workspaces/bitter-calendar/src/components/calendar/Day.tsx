@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../../styles/theme';
 import { DayInfo } from '../../types/calendar';
@@ -6,6 +6,7 @@ import { getDateFormat, getMonthFormat } from '../../utils/i18n';
 import { EventContext } from '../../contexts/EventContext';
 import { CalendarEventBase } from '../../types/event';
 import { EVENT_DISPATCH_TYPE } from '../../hooks/useEvent';
+import Event from './Event';
 
 export const EMPTY_IMAGE = new Image(1, 1);
 EMPTY_IMAGE.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
@@ -32,7 +33,7 @@ interface DayProps {
 }
 
 export default function Day({ day }: DayProps): React.ReactElement {
-  const { event, eventDispatch } = useContext(EventContext);
+  const { eventDispatch } = useContext(EventContext);
 
   function dragStart(e: React.DragEvent<HTMLDivElement>) {
     e.dataTransfer.effectAllowed = 'move';
@@ -49,7 +50,7 @@ export default function Day({ day }: DayProps): React.ReactElement {
       end: day.isoString,
       allDay: true,
     };
-    eventDispatch({ type: EVENT_DISPATCH_TYPE.TEMP, payload: newEvent });
+    eventDispatch({ type: EVENT_DISPATCH_TYPE.TEMP, payload: [newEvent] });
   }
 
   function dragOver(e: React.DragEvent<HTMLDivElement>) {
@@ -66,6 +67,14 @@ export default function Day({ day }: DayProps): React.ReactElement {
       onDragOver={dragOver}
     >
       {getMonthFormat(day.dateObject)} {getDateFormat(day.dateObject)}
+      {day.events?.map((event, index) => {
+        return (
+          <Event
+            key={index}
+            eventKey={event}
+          />
+        );
+      })}
     </DayWrapper>
   );
 }

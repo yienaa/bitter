@@ -47,7 +47,7 @@ const BodyWrapper = styled.div`
 export default function CalendarBody(): React.ReactElement {
   const today = useToday();
   const [current, setCurrent] = useCurrent();
-  const [event, eventDispatch] = useEvent();
+  const [rawEvent, eventMap, eventDispatch] = useEvent();
   const [weeks, setWeeks] = useState<WeekInfo[]>(generate6Weeks(today.year, today.month));
   const [deltaY, setDeltaY] = useState(0);
   const debounce = useDebounce<number>(deltaY);
@@ -70,7 +70,7 @@ export default function CalendarBody(): React.ReactElement {
 
   return (
     <TodayContext.Provider value={today}>
-      <EventContext.Provider value={{ event: null, eventDispatch }}>
+      <EventContext.Provider value={{ rawEvent, eventMap, eventDispatch }}>
         <CurrentContext.Provider value={{ current: current, setCurrent: setCurrent }}>
           <BodyWrapper onWheel={onWheelEvent}>
             <Controllers />

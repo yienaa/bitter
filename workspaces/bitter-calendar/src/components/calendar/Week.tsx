@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import Day from './Day';
 import { colors } from '../../../styles/theme';
 import { DayInfo, WeekInfo } from '../../types/calendar';
 import { generate7Days } from '../../utils/dayInfo';
+import { EventContext } from '../../contexts/EventContext';
 
 const DayWrapper = styled.div`
   width: 100%;
@@ -18,7 +19,23 @@ interface WeekProps {
 }
 
 export default function Week({ week }: WeekProps): React.ReactElement {
-  const days: DayInfo[] = generate7Days(week.firstDayOfWeek);
+  const { eventMap } = useContext(EventContext);
+  const [days, setDays] = useState<DayInfo[]>(generate7Days(week.firstDayOfWeek));
+
+  useMemo(() => {
+    if (eventMap) {
+      setDays(
+        days.map((day) => {
+          const event = eventMap?.[day.key];
+          if (event) {
+            day.events = event;
+          }
+          return day;
+        }),
+      );
+    }
+  }, [eventMap]);
+
   const createDays = days.map((day) => (
     <Day
       key={day.key}

@@ -1,3 +1,5 @@
+import { EventMapData, RawEventMap } from '../hooks/useEvent';
+
 export interface DragInfo {
   isDragging: boolean;
   dragStartDay: number;
@@ -32,6 +34,7 @@ export interface DayInfo {
   weekOnMonth: number;
   isoString: ISOZeroDateString;
   dateObject: Date;
+  events?: EventMapData; //event key[]
 }
 
 export interface WeekInfo {
