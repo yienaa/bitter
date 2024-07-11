@@ -67,14 +67,6 @@ export default function Day({ day }: DayProps): React.ReactElement {
       onDragOver={dragOver}
     >
       {getMonthFormat(day.dateObject)} {getDateFormat(day.dateObject)}
-      {day.events?.map((event, index) => {
-        return (
-          <Event
-            key={index}
-            eventKey={event}
-          />
-        );
-      })}
     </DayWrapper>
   );
 }

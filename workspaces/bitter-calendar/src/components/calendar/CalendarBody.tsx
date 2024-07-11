@@ -12,6 +12,7 @@ import useToday from '../../hooks/useToday';
 import useCurrent from '../../hooks/useCurrent';
 import useDebounce from '../../hooks/useDebounce';
 import { calculateCurrentInfo } from '../../utils/currentInfo';
+import Month from './Month';
 
 function baseCalendar() {
   const today = new Date();
@@ -31,15 +32,6 @@ const getWeeksInMonth = (year: number, month: number) => {
   return Math.ceil(used / 7);
 };
 
-const WeekWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-
-  > div {
-    height: calc(100% / 6);
-  }
-`;
-
 const BodyWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -47,7 +39,7 @@ const BodyWrapper = styled.div`
 export default function CalendarBody(): React.ReactElement {
   const today = useToday();
   const [current, setCurrent] = useCurrent();
-  const [rawEvent, eventMap, eventDispatch] = useEvent();
+  const [eventEntities, eventDispatch] = useEvent();
   const [weeks, setWeeks] = useState<WeekInfo[]>(generate6Weeks(today.year, today.month));
   const [deltaY, setDeltaY] = useState(0);
   const debounce = useDebounce<number>(deltaY);
@@ -70,18 +62,11 @@ export default function CalendarBody(): React.ReactElement {
 
   return (
     <TodayContext.Provider value={today}>
-      <EventContext.Provider value={{ rawEvent, eventMap, eventDispatch }}>
+      <EventContext.Provider value={{ eventEntities, eventDispatch }}>
         <CurrentContext.Provider value={{ current: current, setCurrent: setCurrent }}>
           <BodyWrapper onWheel={onWheelEvent}>
             <Controllers />
-            <WeekWrapper>
-              {weeks.map((week) => (
-                <Week
-                  key={week.key}
-                  week={week}
-                />
-              ))}
-            </WeekWrapper>
+            <Month {...{ weeks }} />
           </BodyWrapper>
         </CurrentContext.Provider>
       </EventContext.Provider>

@@ -4,23 +4,26 @@ import { EventContext } from '../../contexts/EventContext';
 import { CalendarEvent } from '../../types/event';
 
 const EventElement = styled.div<EventPros>`
+  &:not(:first-child) {
+    margin-top: 2px;
+  }
   height: 20px;
-  ${({ eventKey }) => (eventKey ? `background-color: red;` : ``)}
+  ${({ id }) => (id ? `background-color: red;` : ``)}
 `;
 interface EventPros {
-  eventKey: string | null;
+  id: string | null;
 }
 
-export default function Event({ eventKey }: EventPros): React.ReactElement {
-  const { rawEvent, eventDispatch } = useContext(EventContext);
+export default function Event({ id }: EventPros): React.ReactElement {
+  const { eventEntities, eventDispatch } = useContext(EventContext);
   const [event, setEvent] = useState<CalendarEvent | null>(null);
   useEffect(() => {
-    if (eventKey && rawEvent) {
-      setEvent(rawEvent[eventKey]);
+    if (id && eventEntities) {
+      setEvent(eventEntities.entities[id]);
     } else {
       setEvent(null);
     }
   }, []);
 
-  return <EventElement eventKey={eventKey}>{eventKey && 'Event'}</EventElement>;
+  return <EventElement id={id}>{id && id.substring(0, 4)}</EventElement>;
 }

@@ -19,22 +19,22 @@ interface WeekProps {
 }
 
 export default function Week({ week }: WeekProps): React.ReactElement {
-  const { eventMap } = useContext(EventContext);
+  const { eventEntities } = useContext(EventContext);
   const [days, setDays] = useState<DayInfo[]>(generate7Days(week.firstDayOfWeek));
 
-  useMemo(() => {
-    if (eventMap) {
-      setDays(
-        days.map((day) => {
-          const event = eventMap?.[day.key];
-          if (event) {
-            day.events = event;
-          }
-          return day;
-        }),
-      );
-    }
-  }, [eventMap]);
+  // useMemo(() => {
+  //   if (eventEntities) {
+  //     setDays(
+  //       days.map((day) => {
+  //         const event = eventEntities?.arrange[day.key];
+  //         if (event) {
+  //           day.events = event;
+  //         }
+  //         return day;
+  //       }),
+  //     );
+  //   }
+  // }, [eventEntities]);
 
   const createDays = days.map((day) => (
     <Day

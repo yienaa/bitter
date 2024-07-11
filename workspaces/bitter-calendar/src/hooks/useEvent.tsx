@@ -2,9 +2,13 @@ import { Dispatch, SetStateAction, useEffect, useReducer, useState } from 'react
 import { CalendarEvent, CalendarEventBase } from '../types/event';
 import { ISODateString } from '../types/calendar';
 
-export type EventMap = { [key: string]: EventMapData } | null;
+export type EventEntities = {
+  entities: RawEventMap;
+  arrange: EventArrange;
+} | null;
+export type EventArrange = { [key: string]: EventMapData } | null;
 export type EventMapData = (string | null)[];
-export type RawEventMap = { [key: string]: CalendarEvent } | null;
+export type RawEventMap = { [key: string]: CalendarEvent };
 
 export const EVENT_DISPATCH_TYPE = {
   ADD: 'add',
@@ -20,14 +24,8 @@ export interface EventDispatch {
 }
 
 // TODO map 으로 변환
-export function useEvent(): [RawEventMap, EventMap, Dispatch<EventDispatch>] {
-  const [rawEvent, eventDispatch] = useReducer(eventReducer, null);
-  const [eventMap, setEventMap] = useState<EventMap>(null);
-  useEffect(() => {
-    if (rawEvent) {
-      setEventMap(arrangeEvents(rawEvent));
-    }
-  }, [rawEvent]);
+export function useEvent(): [EventEntities, Dispatch<EventDispatch>] {
+  const [eventEntities, eventDispatch] = useReducer(eventReducer, null);
 
   function diffNumberOfDay(start: ISODateString, end: ISODateString): number {
     const startDate = new Date(start);
@@ -46,31 +44,47 @@ export function useEvent(): [RawEventMap, EventMap, Dispatch<EventDispatch>] {
     return payload.reduce((acc, cur) => ({ ...acc, [cur.id]: convertToCalendarData(cur) }), {});
   }
 
-  function eventReducer(state: RawEventMap | null, action: EventDispatch): RawEventMap | null {
+  function eventReducer(state: EventEntities | null, action: EventDispatch): EventEntities | null {
     switch (action.type) {
       case EVENT_DISPATCH_TYPE.ADD:
       case EVENT_DISPATCH_TYPE.TEMP:
         if (state) {
-          return {
-            ...state,
+          const newEntities = {
+            ...state.entities,
             ...convertCalendarEventDataToRawData(action.payload),
           };
+          return {
+            entities: newEntities,
+            arrange: arrangeEvents(newEntities),
+          };
         }
-        return convertCalendarEventDataToRawData(action.payload);
+        const newEntities = convertCalendarEventDataToRawData(action.payload);
+        return {
+          entities: newEntities,
+          arrange: arrangeEvents(newEntities),
+        };
       case EVENT_DISPATCH_TYPE.DELETE:
         if (state) {
+          const newEntities = { ...state.entities };
           action.payload.forEach((event) => {
-            delete state[event.id];
+            delete newEntities[event.id];
           });
-          return { ...state };
+          return {
+            entities: newEntities,
+            arrange: arrangeEvents(newEntities),
+          };
         }
         return state;
       case EVENT_DISPATCH_TYPE.UPDATE:
         if (state) {
+          const newEntities = { ...state.entities };
           action.payload.forEach((event) => {
-            state[event.id] = convertToCalendarData(event);
+            newEntities[event.id] = convertToCalendarData(event);
           });
-          return { ...state };
+          return {
+            entities: newEntities,
+            arrange: arrangeEvents(newEntities),
+          };
         }
         return state;
       default:
@@ -78,11 +92,10 @@ export function useEvent(): [RawEventMap, EventMap, Dispatch<EventDispatch>] {
     }
   }
 
-  return [rawEvent, eventMap, eventDispatch];
+  return [eventEntities, eventDispatch];
 }
 
-// TODO 0711 날짜계산버그있음. 이벤트가 없을 경우 0으로 보정이 안됨
-function arrangeEvents(events: RawEventMap): { [key: string]: (string | null)[] } | null {
+function arrangeEvents(events: RawEventMap): EventArrange {
   if (!events) return null;
   const result: { [key: string]: (string | null)[] } = {};
   let maxPosition = 0;

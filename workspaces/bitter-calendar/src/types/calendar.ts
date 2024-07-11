@@ -34,7 +34,6 @@ export interface DayInfo {
   weekOnMonth: number;
   isoString: ISOZeroDateString;
   dateObject: Date;
-  events?: EventMapData; //event key[]
 }
 
 export interface WeekInfo {
@@ -43,6 +42,8 @@ export interface WeekInfo {
   month: number;
   weekOfMonth: number;
   firstDayOfWeek: DayInfo;
+  lastDayOfWeek: DayInfo;
+  events?: EventMapData; //event key[]
 }
 
 export type ISODateString = string; // "2011-10-05T14:48:00.000Z"

@@ -1,17 +1,15 @@
 import { Context, createContext, Dispatch, SetStateAction } from 'react';
-import { calculateDayInfo } from '../utils/dayInfo';
+import { generateDayInfo } from '../utils/dayInfo';
 import { CurrentInfo, DayInfo } from '../types/calendar';
 import { CalendarEvent, CalendarEventBase } from '../types/event';
-import { EventDispatch, EventMap, RawEventMap } from '../hooks/useEvent';
+import { EventDispatch, EventEntities, RawEventMap } from '../hooks/useEvent';
 
 interface ICurrentContext {
-  rawEvent: RawEventMap;
-  eventMap: EventMap;
+  eventEntities: EventEntities;
   eventDispatch: Dispatch<EventDispatch>;
 }
 
 export const EventContext: Context<ICurrentContext> = createContext<ICurrentContext>({
-  rawEvent: null,
-  eventMap: null,
+  eventEntities: null,
   eventDispatch: () => {},
 });

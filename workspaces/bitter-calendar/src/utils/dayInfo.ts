@@ -1,6 +1,6 @@
 import { DayInfo, ISODateString } from '../types/calendar';
 
-export function calculateDayInfo(isoString?: ISODateString): DayInfo {
+export function generateDayInfo(isoString?: ISODateString): DayInfo {
   const day = new Date(isoString || new Date().toISOString());
   const year = day.getFullYear();
   const month = day.getMonth();
@@ -33,7 +33,7 @@ export function generate7Days(firstDayOfWeek: DayInfo): DayInfo[] {
   for (let i = 0; i < 7; i++) {
     const day = new Date(firstDayOfWeek.isoString);
     day.setDate(firstDayOfWeek.date + i);
-    days.push(calculateDayInfo(day.toISOString()));
+    days.push(generateDayInfo(day.toISOString()));
   }
   return days;
 }

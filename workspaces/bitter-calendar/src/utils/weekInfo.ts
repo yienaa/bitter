@@ -1,15 +1,16 @@
 import { DayInfo, WeekInfo } from '../types/calendar';
-import { calculateDayInfo } from './dayInfo';
+import { generateDayInfo } from './dayInfo';
 
-export function weekInfo(year: number, month: number, week: number): WeekInfo | null {
+export function generateWeekInfo(year: number, month: number, week: number): WeekInfo | null {
   const firstDayOfWeek = getFirstDayOfWeek(year, month, week);
-
+  const lastDayOfWeek = getLastDayOfWeek(firstDayOfWeek);
   return {
     key: `${year}-${month + 1}+${week}`,
     year,
     month,
     weekOfMonth: week,
     firstDayOfWeek,
+    lastDayOfWeek,
   };
 }
 
@@ -18,7 +19,7 @@ export function generate6Weeks(year: number, month: number): WeekInfo[] {
   const weeksInMonth = getWeeksCountInMonth(year, month);
 
   for (let i = 1; i <= weeksInMonth; i++) {
-    const week = weekInfo(year, month, i);
+    const week = generateWeekInfo(year, month, i);
     if (week) {
       weeks.push(week);
     }
@@ -30,7 +31,7 @@ export function generate6Weeks(year: number, month: number): WeekInfo[] {
     const nextYear = nextMonth === 12 ? year + 1 : year;
 
     for (let i = 1; i <= restCount; i++) {
-      const week = weekInfo(nextYear, nextMonth, i);
+      const week = generateWeekInfo(nextYear, nextMonth, i);
       if (week) {
         weeks.push(week);
       }
@@ -70,15 +71,18 @@ export function getFirstDayOfWeek(year: number, month: number, week: number): Da
   const yearToUse = monthToUse === -1 ? year - 1 : year;
   const dateToUse = date <= 0 ? prevMonthLastDate + date : date;
 
-  return calculateDayInfo(new Date(yearToUse, monthToUse, dateToUse).toISOString());
+  return generateDayInfo(new Date(yearToUse, monthToUse, dateToUse).toISOString());
 }
 
-// /**
-//  * Get the last day of the week
-//  * @param year
-//  * @param month
-//  * @param week
-//  */
-// export function getLastDayOfWeek(year: number, month: number, week: number): DayInfo {
-//   return calculateDayInfo(new Date(year, month, date).toISOString());
-// }
+/**
+ * Get the last day of the week
+ * @param year
+ * @param month
+ * @param week
+ */
+export function getLastDayOfWeek(firstDayOfWeek: DayInfo): DayInfo {
+  const lastDay = new Date(firstDayOfWeek.dateObject);
+  lastDay.setDate(firstDayOfWeek.date + 6);
+
+  return generateDayInfo(lastDay.toISOString());
+}
