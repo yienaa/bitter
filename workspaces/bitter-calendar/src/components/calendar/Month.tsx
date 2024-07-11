@@ -28,6 +28,8 @@ export default function Month({ weeks }: MonthProps): React.ReactElement {
       weeks.map((week) => {
         const event = distributeEventToWeek(week, eventEntities);
         console.error('eventEntities', eventEntities, weeks, event);
+        // TODO event를 week에 넣어주는 로직
+        // TODO event 계산시 며칠짜리 이벤트인지 계산해서 넣어주기
       });
     }
   }, [eventEntities]);
