@@ -85,38 +85,67 @@ export function useEvent(): [RawEventMap, EventMap, Dispatch<EventDispatch>] {
 function arrangeEvents(events: RawEventMap): { [key: string]: (string | null)[] } | null {
   if (!events) return null;
   const result: { [key: string]: (string | null)[] } = {};
-  const eventPositions: { [id: string]: number } = {};
   let maxPosition = 0;
 
   // 이벤트를 시작 시간 순으로 정렬
-  const sortedEvents = Object.values(events).sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+  const sortedEvents = Object.values(events).sort((a, b) => {
+    // 먼저 이벤트 기간으로 정렬 (긴 이벤트가 먼저 오도록)
+    const aDuration = new Date(a.end).getTime() - new Date(a.start).getTime();
+    const bDuration = new Date(b.end).getTime() - new Date(b.start).getTime();
+
+    const durationDiff = bDuration - aDuration;
+
+    if (durationDiff !== 0) {
+      return durationDiff;
+    }
+
+    // 기간이 같다면 시작 시간으로 정렬
+    return new Date(a.start).getTime() - new Date(b.start).getTime();
+  });
 
   sortedEvents.forEach((event) => {
     const startDate = new Date(event.start);
     const endDate = new Date(event.end);
 
-    // 이벤트에 위치 할당
-    if (eventPositions[event.id] === undefined) {
-      eventPositions[event.id] = maxPosition++;
+    // 이벤트에 적합한 위치 찾기
+    let position = 0;
+    let positionFound = false;
+
+    while (!positionFound && position <= maxPosition) {
+      positionFound = true;
+      for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+        const dateKey = formatDate(date);
+        if (result[dateKey] && result[dateKey][position] !== null) {
+          positionFound = false;
+          position++;
+          break;
+        }
+      }
     }
 
-    // 시작 날짜부터 종료 날짜까지 순회
+    // 새로운 최대 위치 설정
+    if (position > maxPosition) {
+      maxPosition = position;
+    }
+
+    // 결과에 이벤트 추가
     for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
-      const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+      const dateKey = formatDate(date);
 
       if (!result[dateKey]) {
-        result[dateKey] = new Array(maxPosition).fill(null);
+        result[dateKey] = new Array(maxPosition + 1).fill(null);
+      } else if (result[dateKey].length <= maxPosition) {
+        result[dateKey] = [...result[dateKey], ...new Array(maxPosition + 1 - result[dateKey].length).fill(null)];
       }
 
-      // 해당 날짜의 배열에서 이벤트의 위치에 이벤트 ID 추가
-      result[dateKey][eventPositions[event.id]] = event.id;
-
-      // 필요한 경우 배열 크기 확장
-      if (result[dateKey].length < maxPosition) {
-        result[dateKey] = [...result[dateKey], ...new Array(maxPosition - result[dateKey].length).fill(null)];
-      }
+      result[dateKey][position] = event.id;
     }
   });
 
   return result;
+}
+
+// 날짜 형식화 함수
+function formatDate(date: Date): string {
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
