@@ -3,6 +3,7 @@ import Week from './Week';
 import { WeekInfo } from '../../types/calendar';
 import React, { useContext, useEffect, useState } from 'react';
 import { EventContext } from '../../contexts/EventContext';
+import dayjs from 'dayjs';
 
 const WeekWrapper = styled.div`
   width: 100%;
@@ -21,27 +22,32 @@ export default function Month({ weeks }: MonthProps): React.ReactElement {
   const { eventEntities } = useContext(EventContext);
   const [weekInfos, setWeekInfos] = useState<WeekInfo[]>(weeks);
 
+  // TODO 함수 분리가넝
   useEffect(() => {
     if (eventEntities) {
       const copiedEvents = [...Object.values(eventEntities.entities)];
       weeks.map((week) => {
         week.events = [];
 
-        copiedEvents?.forEach((event, index) => {
-          if (event.start <= week.firstDayOfWeek.key) {
-            week.events!.push(event);
-            console.log(event.end, week);
-            if (event.end >= week.lastDayOfWeek.key) {
-              copiedEvents.splice(index, 1);
-              console.log('12123', index);
-            }
+        let size = copiedEvents.length;
+        for (let i = 0; i < size; i++) {
+          if (dayjs(copiedEvents[i].start).isAfter(week.lastDayOfWeek.isoString)) {
+            continue;
           }
-        });
-        // TODO event를 week에 넣어주는 로직
-        // TODO event 계산시 며칠짜리 이벤트인지 계산해서 넣어주기
+          if (!dayjs(copiedEvents[i].end).isAfter(week.lastDayOfWeek.isoString)) {
+            week.events!.push(copiedEvents[i]);
+            copiedEvents.splice(i, 1);
+            size--;
+            i--;
+            continue;
+          }
+          if (!dayjs(copiedEvents[i].start).isBefore(week.firstDayOfWeek.isoString)) {
+            week.events!.push(copiedEvents[i]);
+            continue;
+          }
+        }
       });
     }
-    console.log(weeks);
   }, [eventEntities]);
 
   return (
