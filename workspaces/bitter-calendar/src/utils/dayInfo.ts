@@ -1,4 +1,5 @@
 import { DayInfo, ISODateString } from '../types/calendar';
+import dayjs, { Dayjs } from 'dayjs';
 
 export function generateDayInfo(isoString?: ISODateString): DayInfo {
   const day = new Date(isoString || new Date().toISOString());
@@ -10,10 +11,10 @@ export function generateDayInfo(isoString?: ISODateString): DayInfo {
   const isToday = day.toDateString() === today.toDateString();
   const isHoliday = day.getDay() === 0 || day.getDay() === 6;
   const weekOnMonth = Math.floor((day.getDate() - 1) / 7) + 1;
-  const isoStringDate = new Date(day.setUTCHours(0, 0, 0, 0)); // 타임존 추가하면 바뀔거임
+  const isoStringDate = dayjs(day).startOf('day');
 
   return {
-    key: `${year}-${month + 1}-${date}`,
+    key: dayjs(day).format('YYYY-MM-DD'),
     year,
     month,
     date,

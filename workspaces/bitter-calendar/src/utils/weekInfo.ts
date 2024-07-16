@@ -1,12 +1,12 @@
 import { DayInfo, WeekInfo } from '../types/calendar';
 import { generateDayInfo } from './dayInfo';
+import dayjs from 'dayjs';
 
 export function generateWeekInfo(year: number, month: number, week: number): WeekInfo | null {
   const firstDayOfWeek = getFirstDayOfWeek(year, month, week);
   const lastDayOfWeek = getLastDayOfWeek(firstDayOfWeek);
-  console.error(firstDayOfWeek);
   return {
-    key: `${year}-${month + 1}+${week}`,
+    key: dayjs(firstDayOfWeek.dateObject).format('YYYY-MM-DD'),
     year,
     month,
     weekOfMonth: week,
@@ -18,24 +18,11 @@ export function generateWeekInfo(year: number, month: number, week: number): Wee
 export function generate6Weeks(year: number, month: number): WeekInfo[] {
   const weeks: WeekInfo[] = [];
   const weeksInMonth = getWeeksCountInMonth(year, month);
-
-  for (let i = 1; i <= weeksInMonth; i++) {
+  const calculatedWeeks = weeksInMonth < 6 ? weeksInMonth + 1 : weeksInMonth;
+  for (let i = 1; i <= calculatedWeeks + 1; i++) {
     const week = generateWeekInfo(year, month, i);
     if (week) {
       weeks.push(week);
-    }
-  }
-
-  if (weeksInMonth < 6) {
-    const restCount = 6 - weeksInMonth;
-    const nextMonth = month + 1;
-    const nextYear = nextMonth === 12 ? year + 1 : year;
-
-    for (let i = 1; i <= restCount; i++) {
-      const week = generateWeekInfo(nextYear, nextMonth, i);
-      if (week) {
-        weeks.push(week);
-      }
     }
   }
 
@@ -72,7 +59,6 @@ export function getFirstDayOfWeek(year: number, month: number, week: number): Da
   const yearToUse = monthToUse === -1 ? year - 1 : year;
   const dateToUse = date <= 0 ? prevMonthLastDate + date : date;
   const day = new Date(yearToUse, monthToUse, dateToUse);
-  console.error(day.toISOString());
   return generateDayInfo(day.toISOString());
 }
 
