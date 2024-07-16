@@ -4,6 +4,7 @@ import { generateDayInfo } from './dayInfo';
 export function generateWeekInfo(year: number, month: number, week: number): WeekInfo | null {
   const firstDayOfWeek = getFirstDayOfWeek(year, month, week);
   const lastDayOfWeek = getLastDayOfWeek(firstDayOfWeek);
+  console.error(firstDayOfWeek);
   return {
     key: `${year}-${month + 1}+${week}`,
     year,
@@ -70,8 +71,9 @@ export function getFirstDayOfWeek(year: number, month: number, week: number): Da
   const monthToUse = date <= 0 ? month - 1 : month;
   const yearToUse = monthToUse === -1 ? year - 1 : year;
   const dateToUse = date <= 0 ? prevMonthLastDate + date : date;
-
-  return generateDayInfo(new Date(yearToUse, monthToUse, dateToUse).toISOString());
+  const day = new Date(yearToUse, monthToUse, dateToUse);
+  console.error(day.toISOString());
+  return generateDayInfo(day.toISOString());
 }
 
 /**

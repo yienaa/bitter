@@ -10,7 +10,7 @@ export function drawTempEvent() {
   console.log('draw temp event');
 }
 
-export function distributeEventToWeek(week: WeekInfo, event: EventEntities): CalendarEvent[] {
-  console.log('distribute event to week');
+export function distributeEventToWeek(week: WeekInfo, eventList: CalendarEvent[]): CalendarEvent[] {
+  const result = [];
   return [];
 }
