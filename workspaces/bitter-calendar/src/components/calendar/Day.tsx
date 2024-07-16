@@ -38,7 +38,6 @@ export default function Day({ day }: DayProps): React.ReactElement {
   function dragStart(e: React.DragEvent<HTMLDivElement>) {
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setDragImage(EMPTY_IMAGE, 0, 0);
-    console.error(day.isoString);
     e.dataTransfer.setData('startDate', day.isoString);
   }
 

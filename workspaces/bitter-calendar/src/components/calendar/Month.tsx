@@ -26,8 +26,9 @@ export default function Month({ weeks }: MonthProps): React.ReactElement {
   useEffect(() => {
     if (eventEntities) {
       const copiedEvents = [...Object.values(eventEntities.entities)];
+      // todo 변경된 주만 업데이트
       weeks.map((week) => {
-        week.events = [];
+        if (!week.events) week.events = [];
 
         let size = copiedEvents.length;
         for (let i = 0; i < size; i++) {

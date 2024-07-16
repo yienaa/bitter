@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useReducer, useState } from 'react';
 import { CalendarEvent, CalendarEventBase } from '../types/event';
 import { ISODateString } from '../types/calendar';
+import dayjs from 'dayjs';
 
 export type EventEntities = {
   entities: RawEventMap;
@@ -160,5 +161,5 @@ function arrangeEvents(events: RawEventMap): EventArrange {
 
 // 날짜 형식화 함수
 function formatDate(date: Date): string {
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  return dayjs(date).format('YYYY-MM-DD');
 }
