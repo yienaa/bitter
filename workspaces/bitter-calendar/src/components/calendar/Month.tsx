@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 import Week from './Week';
 import { WeekInfo } from '../../types/calendar';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { EventContext } from '../../contexts/EventContext';
 import dayjs from 'dayjs';
+import { Simulate } from 'react-dom/test-utils';
+import error = Simulate.error;
 
 const WeekWrapper = styled.div`
   width: 100%;
@@ -19,37 +21,7 @@ interface MonthProps {
 }
 
 export default function Month({ weeks }: MonthProps): React.ReactElement {
-  const { eventEntities } = useContext(EventContext);
-  const [weekInfos, setWeekInfos] = useState<WeekInfo[]>(weeks);
-
-  // TODO 함수 분리가넝
-  useEffect(() => {
-    if (eventEntities) {
-      const copiedEvents = [...Object.values(eventEntities.entities)];
-      // todo 변경된 주만 업데이트
-      weeks.map((week) => {
-        if (!week.events) week.events = [];
-
-        let size = copiedEvents.length;
-        for (let i = 0; i < size; i++) {
-          if (dayjs(copiedEvents[i].start).isAfter(week.lastDayOfWeek.isoString)) {
-            continue;
-          }
-          if (!dayjs(copiedEvents[i].end).isAfter(week.lastDayOfWeek.isoString)) {
-            week.events!.push(copiedEvents[i]);
-            copiedEvents.splice(i, 1);
-            size--;
-            i--;
-            continue;
-          }
-          if (!dayjs(copiedEvents[i].start).isBefore(week.firstDayOfWeek.isoString)) {
-            week.events!.push(copiedEvents[i]);
-            continue;
-          }
-        }
-      });
-    }
-  }, [eventEntities]);
+  console.log('MonthMonthMonthMonthMonthMonthMonth');
 
   return (
     <WeekWrapper>
