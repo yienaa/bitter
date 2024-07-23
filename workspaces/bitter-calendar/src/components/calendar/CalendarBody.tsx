@@ -1,25 +1,15 @@
 import React, { useEffect, useState, WheelEvent } from 'react';
 import styled from 'styled-components';
 import Controllers from './Controllers';
-import Week from './Week';
 import { WeekInfo } from '../../types/calendar';
 import { TodayContext } from '../../contexts/TodayContext';
 import { CurrentContext } from '../../contexts/CurrentContext';
-import { EventContext } from '../../contexts/EventContext';
-import { useEvent } from '../../hooks/useEvent';
 import { generate6Weeks } from '../../utils/weekInfo';
 import useToday from '../../hooks/useToday';
 import useCurrent from '../../hooks/useCurrent';
 import useDebounce from '../../hooks/useDebounce';
 import { calculateCurrentInfo } from '../../utils/currentInfo';
 import Month from './Month';
-
-function baseCalendar() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  const weeks = getWeeksInMonth(year, month);
-}
 
 const getWeeksInMonth = (year: number, month: number) => {
   const firstDay = new Date(year, month, 1);
@@ -39,7 +29,6 @@ const BodyWrapper = styled.div`
 export default function CalendarBody(): React.ReactElement {
   const today = useToday();
   const [current, setCurrent] = useCurrent();
-  const [eventEntities, eventDispatch] = useEvent();
   const [weeks, setWeeks] = useState<WeekInfo[]>(generate6Weeks(today.year, today.month));
   const [deltaY, setDeltaY] = useState(0);
   const debounce = useDebounce<number>(deltaY);
@@ -62,14 +51,12 @@ export default function CalendarBody(): React.ReactElement {
 
   return (
     <TodayContext.Provider value={today}>
-      <EventContext.Provider value={{ eventEntities, eventDispatch }}>
-        <CurrentContext.Provider value={{ current: current, setCurrent: setCurrent }}>
-          <BodyWrapper onWheel={onWheelEvent}>
-            <Controllers />
-            <Month {...{ weeks }} />
-          </BodyWrapper>
-        </CurrentContext.Provider>
-      </EventContext.Provider>
+      <CurrentContext.Provider value={{ current: current, setCurrent: setCurrent }}>
+        <BodyWrapper onWheel={onWheelEvent}>
+          <Controllers />
+          <Month {...{ weeks }} />
+        </BodyWrapper>
+      </CurrentContext.Provider>
     </TodayContext.Provider>
   );
 }

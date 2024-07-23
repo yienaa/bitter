@@ -1,9 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useReducer, useState } from 'react';
+import { Dispatch, useReducer } from 'react';
 import { CalendarEvent, CalendarEventBase } from '../types/event';
 import { ISODateString } from '../types/calendar';
 import dayjs from 'dayjs';
 
 export type EventEntities = {
+  changedEvents: string[];
   entities: RawEventMap;
   arrange: EventArrange;
 } | null;
@@ -24,7 +25,7 @@ export interface EventDispatch {
   payload: CalendarEventBase[] | CalendarEvent[];
 }
 
-// TODO map 으로 변환
+// TODO 데이터가 좀 실용적??????이지 않음
 export function useEvent(): [EventEntities, Dispatch<EventDispatch>] {
   const [eventEntities, eventDispatch] = useReducer(eventReducer, null);
 
@@ -50,27 +51,33 @@ export function useEvent(): [EventEntities, Dispatch<EventDispatch>] {
       case EVENT_DISPATCH_TYPE.ADD:
       case EVENT_DISPATCH_TYPE.TEMP:
         if (state) {
+          const newEvents = convertCalendarEventDataToRawData(action.payload);
           const newEntities = {
             ...state.entities,
-            ...convertCalendarEventDataToRawData(action.payload),
+            ...newEvents,
           };
           return {
+            changedEvents: Object.keys(newEvents),
             entities: newEntities,
             arrange: arrangeEvents(newEntities),
           };
         }
         const newEntities = convertCalendarEventDataToRawData(action.payload);
         return {
+          changedEvents: Object.keys(newEntities),
           entities: newEntities,
           arrange: arrangeEvents(newEntities),
         };
       case EVENT_DISPATCH_TYPE.DELETE:
         if (state) {
           const newEntities = { ...state.entities };
+          const changedEvents: string[] = [];
           action.payload.forEach((event) => {
+            changedEvents.push(event.id);
             delete newEntities[event.id];
           });
           return {
+            changedEvents,
             entities: newEntities,
             arrange: arrangeEvents(newEntities),
           };
@@ -79,10 +86,13 @@ export function useEvent(): [EventEntities, Dispatch<EventDispatch>] {
       case EVENT_DISPATCH_TYPE.UPDATE:
         if (state) {
           const newEntities = { ...state.entities };
+          const changedEvents: string[] = [];
           action.payload.forEach((event) => {
+            changedEvents.push(event.id);
             newEntities[event.id] = convertToCalendarData(event);
           });
           return {
+            changedEvents,
             entities: newEntities,
             arrange: arrangeEvents(newEntities),
           };

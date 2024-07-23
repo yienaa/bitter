@@ -10,6 +10,7 @@ export interface CalendarEventBase {
 }
 export interface CalendarEvent extends CalendarEventBase {
   days: number;
+  left?: number; // todo 임시데이터
   description?: string;
   location?: string;
   attendees?: string[];

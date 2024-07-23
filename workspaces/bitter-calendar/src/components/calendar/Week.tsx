@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Day from './Day';
 import { colors } from '../../../styles/theme';
 import { DayInfo, WeekInfo } from '../../types/calendar';
 import { generate7Days } from '../../utils/dayInfo';
-import { EventContext } from '../../contexts/EventContext';
 import Event from './Event';
-import dayjs from 'dayjs';
 import { CalendarEvent } from '../../types/event';
 
 const DayWrapper = styled.div`
@@ -20,11 +18,14 @@ const DayWrapper = styled.div`
 
 interface WeekProps {
   week: WeekInfo;
+  events: CalendarEvent[];
 }
 
-export default function Week({ week }: WeekProps): React.ReactElement {
+export default function Week({ week, events }: WeekProps): React.ReactElement {
   const [days, setDays] = useState<DayInfo[]>(generate7Days(week.firstDayOfWeek));
-  console.log('WeekWeekWeekWeekWeek');
+
+  console.log('WeekWeekWeekWeekWeek', events);
+
   const createDays = days.map((day) => (
     <Day
       key={day.key}
@@ -33,7 +34,7 @@ export default function Week({ week }: WeekProps): React.ReactElement {
   ));
   return (
     <DayWrapper>
-      {createDays} <Event week={week} />
+      {createDays} <Event events={events} />
     </DayWrapper>
   );
 }
