@@ -7,19 +7,14 @@ import dayjs from 'dayjs';
 
 const EventWrapper = styled.div`
   position: absolute;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  top: 20px;
 `;
 
-const EventElement = styled.div<{ width: number }>`
-  &:not(:first-child) {
-    margin-top: 2px;
-  }
-
+const EventElement = styled.div<{ width: number; top: number }>`
+  position: absolute;
   width: ${({ width }) => width}px;
   height: 20px;
+  top: ${({ top }) => top}px;
   background-color: red;
 `;
 
@@ -30,14 +25,16 @@ interface EventPros {
 export default function Event({ week }: EventPros): React.ReactElement {
   const ref = useRef<HTMLDivElement>(null);
   const { eventEntities, eventDispatch } = useContext(EventContext);
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [events, setEvents] = useState<CalendarEvent[]>(() => injectEvent());
   const [singleWidth, setSingleWidth] = useState(0);
 
   useEffect(() => {
     if (ref.current) {
       const resizeObserver = new ResizeObserver((entries) => {
-        if (ref.current?.offsetWidth) {
-          setSingleWidth(ref.current?.offsetWidth / 7);
+        console.dir(ref.current?.previousElementSibling);
+        const width = (ref.current?.previousElementSibling as HTMLElement).offsetWidth;
+        if (width) {
+          setSingleWidth(width);
         }
       });
       resizeObserver.observe(ref.current);
@@ -46,11 +43,12 @@ export default function Event({ week }: EventPros): React.ReactElement {
 
   useMemo(() => {
     console.log(55555);
-    injectEvent();
+    const newEvents = injectEvent();
+    setEvents(newEvents);
   }, [eventEntities]);
 
-  function injectEvent() {
-    if (!eventEntities) return;
+  function injectEvent(): CalendarEvent[] {
+    if (!eventEntities) return [];
     const copiedEvents = [...Object.values(eventEntities.entities)];
     // todo 변경된 주만 업데이트
     const result = [];
@@ -84,7 +82,7 @@ export default function Event({ week }: EventPros): React.ReactElement {
         continue;
       }
     }
-    setEvents(result);
+    return result;
   }
   return (
     <EventWrapper ref={ref}>
@@ -92,6 +90,7 @@ export default function Event({ week }: EventPros): React.ReactElement {
         <EventElement
           key={event.id + i}
           width={event.days * singleWidth}
+          top={i * 20 + i * 2}
         >
           {event.id + i}
         </EventElement>

@@ -11,7 +11,7 @@ module.exports = (httpServer) => {
   });
 
   io.on('connection', (socket) => {
-    // console.log 를 찍어보면 소켓이 수도없이 생성되는대 이유를 모르겠음.
+ㅁ구     // console.log 를 찍어보면 소켓이 수도없이 생성되는대 이유를 모르겠음.
 
     io.sockets.emit('init', socket.id);
 
