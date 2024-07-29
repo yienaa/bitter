@@ -48,6 +48,8 @@ export default function Month({ weeks }: MonthProps): React.ReactElement {
       return { ...eventEntities.entities[id] };
     });
 
+    console.log(copiedEvents);
+
     const result: WeekEvents = {};
     let size = copiedEvents.length;
     weeks.forEach((week) => {
@@ -70,16 +72,24 @@ export default function Month({ weeks }: MonthProps): React.ReactElement {
           continue;
         }
 
-        // 3. 이벤트 시작일이 이번주 내 일 경우와 이벤트 종료일이 이번주 이후 일 경우ㄷ
+        // 3. 이벤트 시작일이 이번주 내 일 경우
+        if (!dayjs(copiedEvents[i].start).isBefore(week.firstDayOfWeek.isoString)) {
+          // 이벤트 주기 내 이번주가 포함되는 일 수
+          const diff = dayjs(copiedEvents[i].start).diff(week.firstDayOfWeek.isoString, 'days');
+          const requiredDays = Math.abs(7 - diff);
+          result[week.key].push({ ...copiedEvents[i], days: requiredDays, left: diff });
+          copiedEvents[i].days = copiedEvents[i].days - requiredDays;
+          continue;
+        }
+
+        // 이벤트 종료일이 이번주 이후 일 경우
         if (
-          !dayjs(copiedEvents[i].start).isBefore(week.firstDayOfWeek.isoString) ||
+          dayjs(copiedEvents[i].start).isBefore(week.firstDayOfWeek.isoString) &&
           dayjs(copiedEvents[i].end).isAfter(week.lastDayOfWeek.isoString)
         ) {
           // 이벤트 주기 내 이번주가 포함되는 일 수
-          const diff = dayjs(copiedEvents[i].start).diff(week.firstDayOfWeek.isoString, 'days');
-          const requiredDays = 7 - diff;
-          result[week.key].push({ ...copiedEvents[i], days: requiredDays, left: diff });
-          copiedEvents[i].days = copiedEvents[i].days - requiredDays;
+          result[week.key].push({ ...copiedEvents[i], days: 7, left: 0 });
+          copiedEvents[i].days = copiedEvents[i].days - 7;
           continue;
         }
       }

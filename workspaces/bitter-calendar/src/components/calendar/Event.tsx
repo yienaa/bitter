@@ -27,12 +27,13 @@ export default function Event({ events }: EventPros): React.ReactElement {
   useEffect(() => {
     if (ref.current) {
       const resizeObserver = new ResizeObserver((entries) => {
-        const width = (ref.current?.previousElementSibling as HTMLElement).offsetWidth;
+        const width = (ref.current!.parentElement as HTMLElement).offsetWidth;
+        console.log(123123, width);
         if (width) {
-          setSingleWidth(width);
+          setSingleWidth(width / 7);
         }
       });
-      resizeObserver.observe(ref.current);
+      resizeObserver.observe(ref.current!.parentElement as HTMLElement);
     }
   }, []);
 
@@ -45,7 +46,7 @@ export default function Event({ events }: EventPros): React.ReactElement {
           top={i * 20 + i * 2}
           left={event.left ? event.left * singleWidth : 0}
         >
-          {event.id + i}
+          {event.days}
         </EventElement>
       ))}
     </EventWrapper>
