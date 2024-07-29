@@ -1,8 +1,9 @@
 // room Handler
 module.exports = (socket) => {
-  socket.on('room:join', (roomId) => {
+  console.log('----- room handler -----');
+  socket.on('room:join', (roomId, message) => {
     socket.join(roomId);
-    console.log(`a user joined room ${roomId}`);
+    console.log(`a user joined room ${roomId}`, { message });
 
     // 'message' 이벤트를 받으면 해당 룸에 메시지를 전송합니다.
     socket.on('room:createMsg', (message) => {

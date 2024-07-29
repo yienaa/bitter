@@ -14,10 +14,10 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <SocketContext.Provider value={socket.current}>
+        <SocketContext.Provider value={socket}>
           <div className='tw-w-full tw-h-full tw-flex tw-flex-col tw-overflow-hidden'>
             <Toolbar />
-            <section className='tw-h-full tw-flex'>
+            <section className='tw-h-[calc(100%_-_3.5rem)] tw-flex'>
               <RoomList className='tw-border-r-2' />
               {children}
             </section>

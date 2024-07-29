@@ -37,6 +37,8 @@ router.post('/', (req, res) => {
     message: req.body.message,
     time: new Date().toISOString(),
   };
+
+  console.log(newMessage);
   messages.push(newMessage);
   res.status(201).json(newMessage);
   // socket.io 인스턴스를 사용하여 'message created' 이벤트 방출

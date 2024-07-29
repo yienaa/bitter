@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
-import { SocketUrl } from '@/app/hooks/useSocket';
+import { Socket } from 'socket.io-client';
 
+export const RoomSocketContext = createContext<Socket | null>(null);
 export function useRoomSocket(globalSocket: Socket | null, roomId: string): Socket | null {
   const [socket, setSocket] = useState<Socket | null>(null);
   const listener = (event: string, ...args: any[]) => {
@@ -22,7 +22,7 @@ export function useRoomSocket(globalSocket: Socket | null, roomId: string): Sock
 
     setSocket(socketIo);
     socketIo.emit('room:join', roomId);
-    socketIo.onAny(listener);
+    socketIo.on(roomId, listener);
 
     return () => {
       socketIo.emit('room:leave', roomId);
