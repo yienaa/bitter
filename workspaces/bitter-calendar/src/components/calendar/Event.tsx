@@ -14,6 +14,11 @@ const EventElement = styled.div<{ width: number; top: number; left: number }>`
   top: ${({ top }) => top}px;
   left: ${({ left }) => left}px;
   background-color: red;
+  cursor: pointer;
+
+  &:hover {
+    background: mediumspringgreen;
+  }
 `;
 
 interface EventPros {
@@ -27,7 +32,7 @@ export default function Event({ events }: EventPros): React.ReactElement {
   useEffect(() => {
     if (ref.current) {
       const resizeObserver = new ResizeObserver((entries) => {
-        const width = (ref.current!.parentElement as HTMLElement).offsetWidth;
+        const width = (ref.current!.parentElement as HTMLElement)?.offsetWidth;
         console.log(123123, width);
         if (width) {
           setSingleWidth(width / 7);
