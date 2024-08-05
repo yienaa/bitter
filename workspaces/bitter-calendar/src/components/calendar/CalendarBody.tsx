@@ -34,7 +34,7 @@ export default function CalendarBody(): React.ReactElement {
   const debounce = useDebounce<number>(deltaY);
 
   useEffect(() => {
-    // TODO virtualInfinityScroll 사용을 위해 size 6로 유지해야함
+    // TODO scroll 사용을 위해 size 6로 유지해야함
     setWeeks(generate6Weeks(current.year, current.month));
   }, [current]);
 
