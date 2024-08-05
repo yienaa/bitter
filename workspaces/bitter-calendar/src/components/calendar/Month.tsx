@@ -65,7 +65,11 @@ export default function Month({ weeks }: MonthProps): React.ReactElement {
 
         // 2. 이벤트 종료일이 이번주 내 일 경우
         if (!dayjs(copiedEvents[i].end).isAfter(week.lastDayOfWeek.isoString)) {
-          result[week.key].push({ ...copiedEvents[i] });
+          let left = 0;
+          if (!dayjs(copiedEvents[i].start).isBefore(week.firstDayOfWeek.isoString)) {
+            left = dayjs(copiedEvents[i].start).diff(week.firstDayOfWeek.isoString, 'days');
+          }
+          result[week.key].push({ ...copiedEvents[i], left });
           copiedEvents.splice(i, 1);
           size--;
           i--;
