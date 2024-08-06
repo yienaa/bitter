@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Day from './Day';
 import { colors } from '../../../styles/theme';
 import { DayInfo, WeekInfo } from '../../types/calendar';
 import { generate7Days } from '../../utils/dayInfo';
+import { TaskContext } from '../../contexts/TaskContext';
 import Task from './Task';
-import { CalendarTask } from '../../types/task';
 
 const DayWrapper = styled.div`
   position: relative;
@@ -18,23 +18,30 @@ const DayWrapper = styled.div`
 
 interface WeekProps {
   week: WeekInfo;
-  events: CalendarTask[];
 }
 
-export default function Week({ week, events }: WeekProps): React.ReactElement {
+export default function Week({ week }: WeekProps): React.ReactElement {
+  const { eventEntities, eventDispatch } = useContext(TaskContext);
   const [days, setDays] = useState<DayInfo[]>(generate7Days(week.firstDayOfWeek));
+  const createDayElements = () => {
+    const elements: React.ReactElement[] = [];
+    days.forEach((day) => {
+      elements.push(
+        <Day
+          key={`day-${day.key}`}
+          day={day}
+        >
+          <Task
+            key={`task-${day.key}`}
+            day={day}
+            tasks={eventEntities?.arrange?.[day.key] ?? []}
+          />
+          ,
+        </Day>,
+      );
+    });
+    return elements;
+  };
 
-  console.log('Week ::::::::', events);
-
-  const createDays = days.map((day) => (
-    <Day
-      key={day.key}
-      day={day}
-    />
-  ));
-  return (
-    <DayWrapper>
-      {createDays} <Task tasks={events} />
-    </DayWrapper>
-  );
+  return <DayWrapper>{createDayElements()}</DayWrapper>;
 }

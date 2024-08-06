@@ -11,6 +11,7 @@ export interface CalendarEventBase {
 export interface CalendarTask extends CalendarEventBase {
   days: number;
   left?: number; // todo 임시데이터
+  top?: number;
   description?: string;
   location?: string;
   attendees?: string[];

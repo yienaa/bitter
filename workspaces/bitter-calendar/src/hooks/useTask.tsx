@@ -106,40 +106,40 @@ export function useTask(): [EventEntities, Dispatch<TaskDispatch>] {
   return [eventEntities, eventDispatch];
 }
 
-function arrangeEvents(events: RawEventMap): EventArrange {
+function formatDate(date: dayjs.Dayjs): string {
+  return date.format('YYYY-MM-DD');
+}
+
+function arrangeEvents(events: RawEventMap): EventArrange | null {
   if (!events) return null;
   const result: { [key: string]: (string | null)[] } = {};
   let maxPosition = 0;
 
-  // 이벤트를 시작 시간 순으로 정렬
+  // Sort events by duration (longer first) and then by start time
   const sortedEvents = Object.values(events).sort((a, b) => {
-    // 먼저 이벤트 기간으로 정렬 (긴 이벤트가 먼저 오도록)
-    const aDuration = new Date(a.end).getTime() - new Date(a.start).getTime();
-    const bDuration = new Date(b.end).getTime() - new Date(b.start).getTime();
+    const aDuration = dayjs(a.end).diff(dayjs(a.start));
+    const bDuration = dayjs(b.end).diff(dayjs(b.start));
 
-    const durationDiff = bDuration - aDuration;
-
-    if (durationDiff !== 0) {
-      return durationDiff;
+    if (bDuration !== aDuration) {
+      return bDuration - aDuration;
     }
 
-    // 기간이 같다면 시작 시간으로 정렬
-    return new Date(a.start).getTime() - new Date(b.start).getTime();
+    return dayjs(a.start).diff(dayjs(b.start));
   });
 
   sortedEvents.forEach((event) => {
-    const startDate = new Date(event.start);
-    const endDate = new Date(event.end);
+    const startDate = dayjs(event.start);
+    const endDate = dayjs(event.end);
 
-    // 이벤트에 적합한 위치 찾기
+    // Find the appropriate position for the event
     let position = 0;
     let positionFound = false;
 
     while (!positionFound && position <= maxPosition) {
       positionFound = true;
-      for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+      for (let date = startDate; date.isBefore(endDate) || date.isSame(endDate); date = date.add(1, 'day')) {
         const dateKey = formatDate(date);
-        if (result[dateKey] && result[dateKey][position] !== null) {
+        if (result[dateKey]) {
           positionFound = false;
           position++;
           break;
@@ -147,14 +147,19 @@ function arrangeEvents(events: RawEventMap): EventArrange {
       }
     }
 
-    // 새로운 최대 위치 설정
+    // Set new max position if needed
     if (position > maxPosition) {
       maxPosition = position;
     }
 
-    // 결과에 이벤트 추가
-    for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+    // Add the event to the result
+    let isFirst = false;
+    for (let date = startDate; date.isBefore(endDate) || date.isSame(endDate); date = date.add(1, 'day')) {
       const dateKey = formatDate(date);
+
+      if (date.day() === 0) {
+        isFirst = false;
+      }
 
       if (!result[dateKey]) {
         result[dateKey] = new Array(maxPosition + 1).fill(null);
@@ -162,14 +167,12 @@ function arrangeEvents(events: RawEventMap): EventArrange {
         result[dateKey] = [...result[dateKey], ...new Array(maxPosition + 1 - result[dateKey].length).fill(null)];
       }
 
-      result[dateKey][position] = event.id;
+      if (!isFirst) {
+        isFirst = true;
+        result[dateKey][position] = event.id;
+      }
     }
   });
 
   return result;
-}
-
-// 날짜 형식화 함수
-function formatDate(date: Date): string {
-  return dayjs(date).format('YYYY-MM-DD');
 }

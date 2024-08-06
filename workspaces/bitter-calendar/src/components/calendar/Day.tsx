@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../../styles/theme';
 import { DayInfo } from '../../types/calendar';
@@ -29,9 +29,10 @@ const DayWrapper = styled.div<DayProps>`
 
 interface DayProps {
   day: DayInfo;
+  children?: React.ReactNode;
 }
 
-export default function Day({ day }: DayProps): React.ReactElement {
+export default function Day({ day, children }: DayProps): React.ReactElement {
   const { eventDispatch } = useContext(TaskContext);
 
   function dragStart(e: React.DragEvent<HTMLDivElement>) {
@@ -66,6 +67,7 @@ export default function Day({ day }: DayProps): React.ReactElement {
       onDragOver={dragOver}
     >
       {getMonthFormat(day.dateObject)} {getDateFormat(day.dateObject)}
+      {children}
     </DayWrapper>
   );
 }
