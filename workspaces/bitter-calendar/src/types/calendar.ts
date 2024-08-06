@@ -1,5 +1,5 @@
-import { EventMapData, RawEventMap } from '../hooks/useEvent';
-import { CalendarEvent } from './event';
+import { EventMapData, RawEventMap } from '../hooks/useTask';
+import { CalendarTask } from './task';
 
 export interface DragInfo {
   isDragging: boolean;
@@ -44,7 +44,7 @@ export interface WeekInfo {
   weekOfMonth: number;
   firstDayOfWeek: DayInfo;
   lastDayOfWeek: DayInfo;
-  events?: CalendarEvent[];
+  tasks?: CalendarTask[];
 }
 
 export type ISODateString = string; // "2011-10-05T14:48:00.000Z"

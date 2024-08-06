@@ -4,8 +4,8 @@ import Day from './Day';
 import { colors } from '../../../styles/theme';
 import { DayInfo, WeekInfo } from '../../types/calendar';
 import { generate7Days } from '../../utils/dayInfo';
-import Event from './Event';
-import { CalendarEvent } from '../../types/event';
+import Task from './Task';
+import { CalendarTask } from '../../types/task';
 
 const DayWrapper = styled.div`
   position: relative;
@@ -18,13 +18,13 @@ const DayWrapper = styled.div`
 
 interface WeekProps {
   week: WeekInfo;
-  events: CalendarEvent[];
+  events: CalendarTask[];
 }
 
 export default function Week({ week, events }: WeekProps): React.ReactElement {
   const [days, setDays] = useState<DayInfo[]>(generate7Days(week.firstDayOfWeek));
 
-  console.log('WeekWeekWeekWeekWeek', events);
+  console.log('Week ::::::::', events);
 
   const createDays = days.map((day) => (
     <Day
@@ -34,7 +34,7 @@ export default function Week({ week, events }: WeekProps): React.ReactElement {
   ));
   return (
     <DayWrapper>
-      {createDays} <Event events={events} />
+      {createDays} <Task tasks={events} />
     </DayWrapper>
   );
 }

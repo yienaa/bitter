@@ -1,4 +1,4 @@
-import { DayInfo, ISODateString } from './calendar';
+import { ISODateString } from './calendar';
 
 export interface CalendarEventBase {
   id: string;
@@ -8,7 +8,7 @@ export interface CalendarEventBase {
   end: ISODateString;
   allDay: boolean;
 }
-export interface CalendarEvent extends CalendarEventBase {
+export interface CalendarTask extends CalendarEventBase {
   days: number;
   left?: number; // todo 임시데이터
   description?: string;

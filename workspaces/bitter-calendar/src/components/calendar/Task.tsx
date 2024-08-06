@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { CalendarEvent } from '../../types/event';
-import { eventBus } from '../../utils/eventBus';
+import { CalendarTask } from '../../types/task';
 
-const EventWrapper = styled.div`
+const TaskWrapper = styled.div`
   position: absolute;
   top: 20px;
 `;
 
-const EventElement = styled.div<{ width: number; top: number; left: number; active: boolean }>`
+const TaskElement = styled.div<TaskElementPros>`
   position: absolute;
   width: ${({ width }) => width}px;
   height: 20px;
@@ -22,14 +21,21 @@ const EventElement = styled.div<{ width: number; top: number; left: number; acti
   }
 `;
 
-interface EventPros {
-  events: CalendarEvent[];
+interface TaskElementPros {
+  width: number;
+  top: number;
+  left: number;
+  active: boolean;
 }
 
-export default function Event({ events }: EventPros): React.ReactElement {
+interface TaskPros {
+  tasks: CalendarTask[];
+}
+
+export default function Task({ tasks }: TaskPros): React.ReactElement {
   const ref = useRef<HTMLDivElement>(null);
   const [singleWidth, setSingleWidth] = useState(0);
-  const [activeId, setActiveId] = useState<string>('');
+
   useEffect(() => {
     if (ref.current) {
       const resizeObserver = new ResizeObserver((entries) => {
@@ -40,46 +46,27 @@ export default function Event({ events }: EventPros): React.ReactElement {
       });
       resizeObserver.observe(ref.current?.parentElement as HTMLElement);
     }
-
-    const eventMouseOver = ({ eventId }: { eventId: string }) => {
-      setActiveId(eventId);
-    };
-    const eventMouseLeave = () => {
-      setActiveId('');
-    };
-
-    eventBus.on('eventMouseOver', eventMouseOver);
-    eventBus.on('eventMouseLeave', eventMouseLeave);
-
-    return () => {
-      eventBus.off('eventMouseOver', eventMouseOver);
-      eventBus.off('eventMouseLeave', eventMouseLeave);
-    };
   }, []);
 
-  function onMouseOver(eventId: string) {
-    eventBus.emit('eventMouseOver', { eventId });
-  }
+  function onMouseOver(eventId: string) {}
 
-  function onMouseLeave(eventId: string) {
-    eventBus.emit('eventMouseLeave', { eventId });
-  }
+  function onMouseLeave(eventId: string) {}
 
   return (
-    <EventWrapper ref={ref}>
-      {events?.map((event, i) => (
-        <EventElement
+    <TaskWrapper ref={ref}>
+      {tasks?.map((event, i) => (
+        <TaskElement
           key={event.id + i}
           width={event.days * singleWidth}
           top={i * 20 + i * 2}
           left={event.left ? event.left * singleWidth : 0}
-          active={event.id === activeId}
+          active={event.id === ''}
           onMouseOver={() => onMouseOver(event.id)}
           onMouseLeave={() => onMouseLeave(event.id)}
         >
           {event.days}
-        </EventElement>
+        </TaskElement>
       ))}
-    </EventWrapper>
+    </TaskWrapper>
   );
 }
