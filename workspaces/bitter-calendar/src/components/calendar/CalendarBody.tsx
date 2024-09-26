@@ -41,9 +41,9 @@ export default function CalendarBody(): React.ReactElement {
   useEffect(() => {
     if (debounce === 0) return;
     if (debounce > 0) {
-      setCurrent(calculateCurrentInfo(current.year, current.month + 1));
-    } else {
       setCurrent(calculateCurrentInfo(current.year, current.month - 1));
+    } else {
+      setCurrent(calculateCurrentInfo(current.year, current.month + 1));
     }
   }, [debounce]);
 
