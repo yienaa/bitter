@@ -18,7 +18,7 @@ export function generateWeekInfo(year: number, month: number, week: number): Wee
 export function generate6Weeks(year: number, month: number): WeekInfo[] {
   const weeks: WeekInfo[] = [];
   const weeksInMonth = getWeeksCountInMonth(year, month);
-  const calculatedWeeks = weeksInMonth < 6 ? weeksInMonth + 1 : weeksInMonth;
+  const calculatedWeeks = weeksInMonth < 5 ? weeksInMonth + 1 : weeksInMonth;
   for (let i = 1; i <= calculatedWeeks + 1; i++) {
     const week = generateWeekInfo(year, month, i);
     if (week) {
@@ -73,4 +73,11 @@ export function getLastDayOfWeek(firstDayOfWeek: DayInfo): DayInfo {
   lastDay.setDate(firstDayOfWeek.date + 6);
 
   return generateDayInfo(lastDay.toISOString());
+}
+
+/**
+ * 
+ */
+export function getWeekday(): string[] {
+  return ['일', '월', '화', '수', '목', '금', '토'];
 }
