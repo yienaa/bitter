@@ -113,7 +113,6 @@ function formatDate(date: dayjs.Dayjs): string {
 function arrangeEvents(events: RawEventMap): EventArrange | null {
   if (!events) return null;
   const result: { [key: string]: (string | null)[] } = {};
-  let maxPosition = 0;
 
   // Sort events by duration (longer first) and then by start time
   const sortedEvents = Object.values(events).sort((a, b) => {
@@ -127,14 +126,16 @@ function arrangeEvents(events: RawEventMap): EventArrange | null {
     return dayjs(a.start).diff(dayjs(b.start));
   });
 
-  sortedEvents.forEach((event) => {
+  sortedEvents.forEach((event, index) => {
     const startDate = dayjs(event.start);
     const endDate = dayjs(event.end);
+    // set max position as the length of the current date's events
+    let maxPosition = result[formatDate(startDate)]?.length - 1 || 0;
 
     // Find the appropriate position for the event
     let position = 0;
     let positionFound = false;
-
+    
     while (!positionFound && position <= maxPosition) {
       positionFound = true;
       for (let date = startDate; date.isBefore(endDate) || date.isSame(endDate); date = date.add(1, 'day')) {
@@ -154,7 +155,7 @@ function arrangeEvents(events: RawEventMap): EventArrange | null {
 
     // Add the event to the result
     let isFirst = false;
-    for (let date = startDate; date.isBefore(endDate) || date.isSame(endDate); date = date.add(1, 'day')) {
+    for (let date = startDate; date.isBefore(endDate.add(1, 'day')); date = date.add(1, 'day')) {
       const dateKey = formatDate(date);
 
       if (date.day() === 0) {
@@ -162,9 +163,10 @@ function arrangeEvents(events: RawEventMap): EventArrange | null {
       }
 
       if (!result[dateKey]) {
-        result[dateKey] = new Array(maxPosition + 1).fill(null);
-      } else if (result[dateKey].length <= maxPosition) {
-        result[dateKey] = [...result[dateKey], ...new Array(maxPosition + 1 - result[dateKey].length).fill(null)];
+        result[dateKey] = new Array(maxPosition + 1).fill(0);
+      }
+      if (result[dateKey].length <= maxPosition) {
+        result[dateKey] = [...result[dateKey], ...new Array(maxPosition + 1 - result[dateKey].length).fill(1)];
       }
 
       if (!isFirst) {

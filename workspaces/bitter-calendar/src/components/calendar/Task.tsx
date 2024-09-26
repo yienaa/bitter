@@ -54,10 +54,10 @@ export default function Task({ tasks, day }: TaskPros): React.ReactElement {
     }
   }, []);
 
-  useEffect(() => {
-    if (!tasks.length) return;
-    console.log(tasks, day.key);
-  }, [eventEntities]);
+  // useEffect(() => {
+  //   if (!tasks.length) return;
+  //   console.log(tasks, day.key);
+  // }, [eventEntities]);
 
   function onMouseOver(eventId: string) {}
 
