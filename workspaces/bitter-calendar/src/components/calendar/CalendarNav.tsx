@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import SmallCalendar from './SmallCalendar';
 
 const Nav = styled.div`
   grid-area: side-bar;
@@ -10,5 +11,7 @@ const Nav = styled.div`
 `;
 
 export default function CalendarNav(): React.ReactElement {
-  return <Nav>작은달력올거얌</Nav>;
+  return <Nav>
+    <SmallCalendar />
+  </Nav>;
 }
