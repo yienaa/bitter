@@ -46,7 +46,7 @@ export default function SmallCalendar(): React.ReactElement {
 
     return <Wrapper>
         <Header>{current.year} {current.month + 1}</Header>
-        <Day>{weekDays.map((day) => <div>{day}</div>)}</Day> 
+        <Day>{weekDays.map((day) => <div key={day}>{day}</div>)}</Day> 
         {
             weeks.map((week) => {
                 return <Week key={week.key}>
