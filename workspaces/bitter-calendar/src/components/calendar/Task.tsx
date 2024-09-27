@@ -5,6 +5,7 @@ import { TaskContext } from '../../contexts/TaskContext';
 import { EventMapData } from '../../hooks/useTask';
 import { DayInfo } from '../../types/calendar';
 import dayjs from 'dayjs';
+import { HoverEventContext } from '../../contexts/HoverEventContext';
 
 const TaskWrapper = styled.div`
   position: absolute;
@@ -20,7 +21,7 @@ const TaskElement = styled.div<TaskElementPros>`
   background-color: dimgray;
   cursor: pointer;
 
-  &:hover {
+  &:hover, &.is-active {
     background-color: aqua;
   }
 `;
@@ -38,6 +39,7 @@ interface TaskPros {
 
 export default function Task({ tasks, day }: TaskPros): React.ReactElement {
   const { eventEntities } = useContext(TaskContext);
+  const { hoverTask, setHoverTask } = useContext(HoverEventContext);
   const ref = useRef<HTMLDivElement>(null);
   const [singleWidth, setSingleWidth] = useState(0);
   const [taskEntities, setTaskEntities] = useState<CalendarTask[]>([]);
@@ -59,9 +61,13 @@ export default function Task({ tasks, day }: TaskPros): React.ReactElement {
   //   console.log(tasks, day.key);
   // }, [eventEntities]);
 
-  function onMouseOver(eventId: string) {}
+  function onMouseOver(eventId: string) {
+    setHoverTask(eventId);
+  }
 
-  function onMouseLeave(eventId: string) {}
+  function onMouseLeave(eventId: string) {
+    setHoverTask(null);
+  }
 
   const renderTask = () => {
     if (!tasks) return;
@@ -87,6 +93,7 @@ export default function Task({ tasks, day }: TaskPros): React.ReactElement {
           width={width}
           top={top}
           left={left}
+          className={`${taskId ===hoverTask ? 'is-active' : ''}`}
           onMouseOver={() => onMouseOver(taskId)}
           onMouseLeave={() => onMouseLeave(taskId)}
         />

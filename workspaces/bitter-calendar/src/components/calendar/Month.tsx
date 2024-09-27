@@ -6,6 +6,8 @@ import { TaskContext } from '../../contexts/TaskContext';
 import dayjs from 'dayjs';
 import { useTask } from '../../hooks/useTask';
 import { CalendarTask } from '../../types/task';
+import { HoverEventContext } from '../../contexts/HoverEventContext';
+import { useHoverTask } from '../../hooks/useHoverTask';
 
 const WeekWrapper = styled.div`
   width: 100%;
@@ -26,6 +28,7 @@ interface MonthProps {
 
 export default function Month({ weeks }: MonthProps): React.ReactElement {
   const [eventEntities, eventDispatch] = useTask();
+  const [hoverTask, setHoverTask] = useHoverTask();
 
   // const injectEvent = useCallback((): WeekEvents => {
   //   if (!eventEntities) return {};
@@ -80,14 +83,16 @@ export default function Month({ weeks }: MonthProps): React.ReactElement {
 
   return (
     <TaskContext.Provider value={{ eventEntities, eventDispatch }}>
-      <WeekWrapper>
-        {weeks.map((week) => (
-          <Week
-            key={week.key}
-            week={week}
-          />
-        ))}
-      </WeekWrapper>
+      <HoverEventContext.Provider value={{ hoverTask, setHoverTask }}>
+        <WeekWrapper>
+          {weeks.map((week) => (
+            <Week
+              key={week.key}
+              week={week}
+            />
+          ))}
+        </WeekWrapper>
+      </HoverEventContext.Provider>
     </TaskContext.Provider>
   );
 }
