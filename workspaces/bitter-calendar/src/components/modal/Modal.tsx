@@ -32,6 +32,7 @@ ${({ useBackdrop }) => useBackdrop && `
 
 const ModalContent = styled.div`
 background: white;
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);  // 그림자 효과 추가
 padding: 20px;
 border-radius: 8px;
 min-width: 300px;
