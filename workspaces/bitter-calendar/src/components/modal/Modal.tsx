@@ -68,35 +68,42 @@ font-size: 20px;
 export default function Modal({ isOpen, onClose, header, content, footer, children }: ModalProps) {
     const modalRef = useRef<HTMLDivElement>(null);
 
-
-    const onModalClose = () => {
-        onClose();
+    const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+            onClose();
+        }
     };
+
+    const renderFooterButtons = () => {
+        if (footer) return footer;
+        
+        return (
+            <>
+                <Button onClick={onClose}>취소</Button>
+                <Button onClick={onClose}>확인</Button>
+            </>
+        );
+    };
+
+    const renderModalContent = () => (
+        <ModalContent ref={modalRef}>
+            <ModalHeader>
+                {header}
+                <CloseButton onClick={onClose}>&times;</CloseButton>
+            </ModalHeader>
+            <ModalBody>
+                {content || children}
+            </ModalBody>
+            <ModalFooter>
+                {renderFooterButtons()}
+            </ModalFooter>
+        </ModalContent>
+    );
 
     return createPortal(
         isOpen && (
-            <ModalWrapper onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-                    onModalClose();
-                }
-            }}>
-                <ModalContent ref={modalRef}>
-                    <ModalHeader>
-                        {header}
-                        <CloseButton onClick={onModalClose}>&times;</CloseButton>
-                    </ModalHeader>
-                    <ModalBody>
-                        {content || children}
-                    </ModalBody>
-                    <ModalFooter>
-                        {footer || (
-                            <>
-                                <Button onClick={onClose}>취소</Button>
-                                <Button onClick={onClose}>확인</Button>
-                            </>
-                        )}
-                    </ModalFooter>
-                </ModalContent>
+            <ModalWrapper onClick={handleBackdropClick}>
+                {renderModalContent()}
             </ModalWrapper>
         ),
         document.body
