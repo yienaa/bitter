@@ -36,8 +36,7 @@ export default function Week({ week }: WeekProps): React.ReactElement {
             day={day}
             tasks={eventEntities?.arrange?.[day.key] ?? []}
           />
-          ,
-        </Day>,
+        </Day>
       );
     });
     return elements;

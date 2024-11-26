@@ -10,30 +10,30 @@ import { useModal } from '../modal/useModal';
 import Modal from '../modal/Modal';
 
 const TaskWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 20px;
 `;
 
-const TaskElement = styled.div<{ width: number; top: number; left: number }>`
+const TaskElement = styled.div<TaskElementPros>`
   position: absolute;
   width: ${({ width }) => width}px;
+  height: 20px;
   top: ${({ top }) => top}px;
   left: ${({ left }) => left}px;
-  height: 20px;
   background-color: ${({ theme }) => theme.colors.primary.light};
   border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
 
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.primary.main};
-  }
-
-  &.is-active {
+  &:hover, &.is-active {
     background-color: ${({ theme }) => theme.colors.primary.dark};
   }
 `;
+
+interface TaskElementPros {
+  width: number;
+  top: number;
+  left: number;
+}
 
 interface TaskPros {
   tasks: EventMapData;
