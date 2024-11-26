@@ -76,7 +76,8 @@ export function getLastDayOfWeek(firstDayOfWeek: DayInfo): DayInfo {
 }
 
 /**
- * 
+ * Get the weekday
+ * TODO i18n https://day.js.org/docs/en/customization/weekday-names
  */
 export function getWeekday(): string[] {
   return ['일', '월', '화', '수', '목', '금', '토'];

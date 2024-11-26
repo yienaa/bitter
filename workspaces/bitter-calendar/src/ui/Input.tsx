@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import React from 'react';
 import Icon from './Icon';
-import { colors } from '../../styles/theme';
+import { theme } from '../../styles/theme';
 
 interface InputProps {
   placeholder: string;
@@ -13,7 +13,7 @@ const StyledInputWrapper = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  border: 1px solid ${colors.border};
+  border: 1px solid ${theme.colors.gray[300]};
   border-radius: 4px;
 
   & > ${Icon} {
@@ -37,7 +37,7 @@ const StyledInput = styled.input<InputProps>`
   }
 
   &::placeholder {
-    color: ${colors.placeholder};
+    color: ${theme.colors.gray[400]};
   }
 `;
 

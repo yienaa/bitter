@@ -1,139 +1,122 @@
-import styled, { css } from 'styled-components';
 import React from 'react';
-import { UI_COLOR, UI_SIZE, UI_VARIANT, UiColor, UiSize, UiVariant } from '../types/style';
-import Icon from './Icon';
+import styled from 'styled-components';
+import { UiSize, UiColor, UiVariant, UI_SIZE, UI_COLOR, UI_VARIANT } from '../types/style';
 
 interface ButtonProps {
-  label?: string | number;
-  onClick?: () => void;
-  disabled?: boolean;
-  size?: UiSize;
-  color?: UiColor;
   variant?: UiVariant;
+  color?: UiColor;
+  size?: UiSize;
+  fullWidth?: boolean;
+  disabled?: boolean;
+  onClick?: () => void;
+  children?: React.ReactNode;
+  label?: string;
   iconClass?: string;
 }
 
-const sizes = {
-  [UI_SIZE.SMALL]: css`
-    font-size: 12px;
-    padding: 4px 8px;
-    height: 24px;
-
-    & > ${Icon} {
-      display: inline-block;
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
-  `,
-  [UI_SIZE.MEDIUM]: css`
-    font-size: 14px;
-    padding: 6px 12px;
-    height: 32px;
-
-    & > ${Icon} {
-      display: inline-block;
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-    }
-  `,
-  [UI_SIZE.LARGE]: css`
-    font-size: 16px;
-    padding: 8px 16px;
-    height: 40px;
-
-    & > ${Icon} {
-      display: inline-block;
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
-  `,
-};
-
-const colors = {
-  [UI_COLOR.PRIMARY]: css`
-    --main-color: #6200ea; /* Vivid Purple */
-    background-color: #6200ea;
-    color: white;
-
-    &:hover {
-      background-color: #3700b3;
-    }
-  `,
-  [UI_COLOR.SECONDARY]: css`
-    --main-color: #757575; /* Cool Gray */
-    background-color: var(--main-color);
-    color: white;
-
-    &:hover {
-      background-color: #cccccc;
-    }
-  `,
-  [UI_COLOR.DANGER]: css`
-    --main-color: #f44336; /* Vivid Purple */
-    background-color: #f44336;
-    color: white;
-
-    &:hover {
-      background-color: #d32f2f;
-    }
-  `,
-};
-
-const styles = {
-  [UI_VARIANT.FILLED]: css`
-    border: none;
-  `,
-  [UI_VARIANT.OUTLINED]: css`
-    background-color: transparent;
-    border: 1px solid var(--main-color);
-    color: var(--main-color);
-  `,
-  [UI_VARIANT.TEXT]: css`
-    background-color: transparent;
-    border: none;
-    color: var(--main-color);
-  `,
-};
-
-const DefaultButtonProps = {
-  size: UI_SIZE.MEDIUM,
-  color: UI_COLOR.PRIMARY,
-  variant: UI_VARIANT.FILLED,
-};
-
 const StyledButton = styled.button<ButtonProps>`
-  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: ${({ size = UI_SIZE.MEDIUM }) => 
+    size === UI_SIZE.SMALL ? '6px 12px' :
+    size === UI_SIZE.LARGE ? '12px 24px' : 
+    '8px 16px'
+  };
+  font-size: ${({ size = UI_SIZE.MEDIUM }) => 
+    size === UI_SIZE.SMALL ? '14px' :
+    size === UI_SIZE.LARGE ? '16px' : 
+    '14px'
+  };
+  width: ${({ fullWidth }) => fullWidth ? '100%' : 'auto'};
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  box-sizing: border-box;
+  transition: all 0.2s ease;
 
-  ${({ size }) => sizes[size || DefaultButtonProps.size]}
-  ${({ color }) => colors[color || DefaultButtonProps.color]}
-  ${({ variant }) => styles[variant || DefaultButtonProps.variant]}
+  ${({ variant = UI_VARIANT.FILLED, color = UI_COLOR.PRIMARY }) => {
+    switch (variant) {
+      case UI_VARIANT.OUTLINED:
+        return `
+          background: transparent;
+          border: 1px solid ${color === UI_COLOR.PRIMARY ? '#1A73E8' : 
+                            color === UI_COLOR.SECONDARY ? '#5F6368' : 
+                            '#D93025'};
+          color: ${color === UI_COLOR.PRIMARY ? '#1A73E8' : 
+                  color === UI_COLOR.SECONDARY ? '#5F6368' : 
+                  '#D93025'};
+          &:hover {
+            background: rgba(0, 0, 0, 0.04);
+          }
+        `;
+      case UI_VARIANT.TEXT:
+        return `
+          background: transparent;
+          border: none;
+          color: ${color === UI_COLOR.PRIMARY ? '#1A73E8' : 
+                  color === UI_COLOR.SECONDARY ? '#5F6368' : 
+                  '#D93025'};
+          &:hover {
+            background: rgba(0, 0, 0, 0.04);
+          }
+        `;
+      default: // FILLED
+        return `
+          background: ${color === UI_COLOR.PRIMARY ? '#1A73E8' : 
+                      color === UI_COLOR.SECONDARY ? '#5F6368' : 
+                      '#D93025'};
+          border: none;
+          color: white;
+          &:hover {
+            background: ${color === UI_COLOR.PRIMARY ? '#1557B0' : 
+                        color === UI_COLOR.SECONDARY ? '#3C4043' : 
+                        '#B31412'};
+          }
+        `;
+    }
+  }}
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    &:hover {
+      background: ${({ variant = UI_VARIANT.FILLED, color = UI_COLOR.PRIMARY }) => 
+        variant === UI_VARIANT.FILLED ? 
+          (color === UI_COLOR.PRIMARY ? '#1A73E8' : 
+           color === UI_COLOR.SECONDARY ? '#5F6368' : 
+           '#D93025') : 
+        'transparent'
+      };
+    }
+  }
 `;
 
-export default function Button({
-  label,
+function Button({
+  variant = UI_VARIANT.FILLED,
+  color = UI_COLOR.PRIMARY,
+  size = UI_SIZE.MEDIUM,
+  fullWidth = false,
+  disabled = false,
   onClick,
-  disabled,
-  size,
-  color,
-  variant,
+  children,
+  label,
   iconClass,
-}: ButtonProps): React.ReactElement {
+  ...props
+}: ButtonProps) {
   return (
     <StyledButton
-      size={size}
-      color={color}
       variant={variant}
+      color={color}
+      size={size}
+      fullWidth={fullWidth}
+      disabled={disabled}
       onClick={onClick}
-      disabled={!!disabled}
+      {...props}
     >
-      {iconClass && <Icon className={iconClass} />}
-      {label}
+      {iconClass && <i className={iconClass} />}
+      {label || children}
     </StyledButton>
   );
 }
+
+export default Button;

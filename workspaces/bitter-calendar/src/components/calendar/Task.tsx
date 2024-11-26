@@ -6,31 +6,34 @@ import { EventMapData } from '../../hooks/useTask';
 import { DayInfo } from '../../types/calendar';
 import dayjs from 'dayjs';
 import { HoverEventContext } from '../../contexts/HoverEventContext';
+import { useModal } from '../modal/useModal';
+import Modal from '../modal/Modal';
 
 const TaskWrapper = styled.div`
-  position: absolute;
-  top: 20px;
+  position: relative;
+  width: 100%;
+  height: 100%;
 `;
 
-const TaskElement = styled.div<TaskElementPros>`
+const TaskElement = styled.div<{ width: number; top: number; left: number }>`
   position: absolute;
   width: ${({ width }) => width}px;
-  height: 20px;
   top: ${({ top }) => top}px;
   left: ${({ left }) => left}px;
-  background-color: dimgray;
+  height: 20px;
+  background-color: ${({ theme }) => theme.colors.primary.light};
+  border-radius: 4px;
   cursor: pointer;
+  transition: all 0.2s ease;
 
-  &:hover, &.is-active {
-    background-color: aqua;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primary.main};
+  }
+
+  &.is-active {
+    background-color: ${({ theme }) => theme.colors.primary.dark};
   }
 `;
-
-interface TaskElementPros {
-  width: number;
-  top: number;
-  left: number;
-}
 
 interface TaskPros {
   tasks: EventMapData;
@@ -43,6 +46,7 @@ export default function Task({ tasks, day }: TaskPros): React.ReactElement {
   const ref = useRef<HTMLDivElement>(null);
   const [singleWidth, setSingleWidth] = useState(0);
   const [taskEntities, setTaskEntities] = useState<CalendarTask[]>([]);
+  const { isOpen, openModal, closeModal } = useModal();
 
   useEffect(() => {
     if (ref.current) {
@@ -56,11 +60,6 @@ export default function Task({ tasks, day }: TaskPros): React.ReactElement {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (!tasks.length) return;
-  //   console.log(tasks, day.key);
-  // }, [eventEntities]);
-
   function onMouseOver(eventId: string) {
     setHoverTask(eventId);
   }
@@ -68,6 +67,15 @@ export default function Task({ tasks, day }: TaskPros): React.ReactElement {
   function onMouseLeave(eventId: string) {
     setHoverTask(null);
   }
+
+  function onTaskClick(eventId: string) {
+    
+  }
+
+  const handleTaskClick = (taskId: string) => {
+    openModal();
+    onTaskClick(taskId);
+  };
 
   const renderTask = () => {
     if (!tasks) return;
@@ -93,13 +101,26 @@ export default function Task({ tasks, day }: TaskPros): React.ReactElement {
           width={width}
           top={top}
           left={left}
-          className={`${taskId ===hoverTask ? 'is-active' : ''}`}
+          className={`${taskId === hoverTask ? 'is-active' : ''}`}
+          draggable={true}
           onMouseOver={() => onMouseOver(taskId)}
           onMouseLeave={() => onMouseLeave(taskId)}
+          onClick={() => handleTaskClick(taskId)}
         />
       );
     });
   };
 
-  return <TaskWrapper ref={ref}>{renderTask()}</TaskWrapper>;
+  return (
+    <>
+      <TaskWrapper ref={ref}>{renderTask()}</TaskWrapper>
+      <Modal 
+        isOpen={isOpen}
+        onClose={closeModal}
+        header="일정 상세"
+      >
+        {/* 모달 내용 */}
+      </Modal>
+    </>
+  );
 }

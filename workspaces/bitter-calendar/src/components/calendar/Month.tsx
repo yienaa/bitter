@@ -30,6 +30,9 @@ export default function Month({ weeks }: MonthProps): React.ReactElement {
   const [eventEntities, eventDispatch] = useTask();
   const [hoverTask, setHoverTask] = useHoverTask();
 
+  useEffect(() => {
+    console.log(eventEntities);
+  }, [eventEntities]);
   // const injectEvent = useCallback((): WeekEvents => {
   //   if (!eventEntities) return {};
   //   const copiedEvents = eventEntities.changedEvents.map((id) => ({

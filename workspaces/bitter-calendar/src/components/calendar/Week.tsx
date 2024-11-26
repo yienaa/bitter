@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Day from './Day';
-import { colors } from '../../../styles/theme';
+import { theme } from '../../../styles/theme';
 import { DayInfo, WeekInfo } from '../../types/calendar';
 import { generate7Days } from '../../utils/dayInfo';
 import { TaskContext } from '../../contexts/TaskContext';
@@ -13,7 +13,7 @@ const DayWrapper = styled.div`
   height: 100%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: 1px solid ${theme.colors.gray[300]};
 `;
 
 interface WeekProps {

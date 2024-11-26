@@ -1,18 +1,17 @@
 import { ISODateString } from './calendar';
+// hover
+// drag
+// click
+// resize
 
-export interface CalendarEventBase {
-  id: string;
-  isTemp: boolean;
-  title: string;
-  start: ISODateString;
-  end: ISODateString;
-  allDay: boolean;
-}
-export interface CalendarTask extends CalendarEventBase {
-  days: number;
-  left?: number; // todo 임시데이터
-  top?: number;
-  description?: string;
-  location?: string;
-  attendees?: string[];
+export const EVENT_TYPES = {
+  HOVER: 'hover',
+  // DRAG: 'drag',
+  // CLICK: 'click',
+  // RESIZE: 'resize',
+} as const;
+export type EventHandleType = typeof EVENT_TYPES[keyof typeof EVENT_TYPES];
+export interface EventTyps {
+  type: EventHandleType;
+  payload: any;
 }

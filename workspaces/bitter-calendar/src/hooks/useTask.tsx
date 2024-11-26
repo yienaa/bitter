@@ -38,7 +38,7 @@ export function useTask(): [EventEntities, Dispatch<TaskDispatch>] {
   function convertToCalendarData(event: CalendarEventBase): CalendarTask {
     return {
       ...event,
-      days: diffNumberOfDay(event.start, event.end),
+      days: diffNumberOfDay(event.start, event.end!),
     };
   }
 
@@ -49,7 +49,6 @@ export function useTask(): [EventEntities, Dispatch<TaskDispatch>] {
   function eventReducer(state: EventEntities | null, action: TaskDispatch): EventEntities | null {
     switch (action.type) {
       case TASK_DISPATCH_TYPE.ADD:
-      case TASK_DISPATCH_TYPE.TEMP:
         if (state) {
           const newEvents = convertCalendarEventDataToRawData(action.payload);
           const newEntities = {
@@ -68,6 +67,27 @@ export function useTask(): [EventEntities, Dispatch<TaskDispatch>] {
           entities: newEntities,
           arrange: arrangeEvents(newEntities),
         };
+      case TASK_DISPATCH_TYPE.TEMP:
+        if (state) {
+          const targetEvent = {
+            ...state.entities[action.payload[0].id],
+            ...action.payload[0],
+            id: 'temp',
+          };
+
+          console.log('1111', targetEvent)
+          const tempEvents = convertCalendarEventDataToRawData([targetEvent]);
+          const newEntities = {
+            ...state.entities,
+            ...tempEvents,
+          };
+          return {
+            changedEvents: Object.keys(tempEvents),
+            entities: newEntities,
+            arrange: arrangeEvents(newEntities),
+          };
+        }
+        return state;
       case TASK_DISPATCH_TYPE.DELETE:
         if (state) {
           const newEntities = { ...state.entities };

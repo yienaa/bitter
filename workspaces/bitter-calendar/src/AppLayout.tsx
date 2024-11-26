@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colors } from '../styles/theme';
+import { theme } from '../styles/theme';
 
 // TODO: 여기서 레이아웃 요소 모두 스타일링
 
@@ -18,13 +18,13 @@ const Header = styled.div`
   padding: 10px;
   display: flex;
   gap: 10px;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: 1px solid ${theme.colors.gray[300]};
 `;
 
 const Nav = styled.div`
   grid-area: side-bar;
   padding: 10px;
-  border-right: 1px solid ${colors.border};
+  border-right: 1px solid ${theme.colors.gray[300]};
 
   // TODO: 작은 달력 스타일링
   // 화면 800px 이하일 경우 스르륵 사라짐

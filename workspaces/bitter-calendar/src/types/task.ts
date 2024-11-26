@@ -3,10 +3,10 @@ import { ISODateString } from './calendar';
 export interface CalendarEventBase {
   id: string;
   isTemp: boolean;
-  title: string;
+  title?: string;
   start: ISODateString;
   end: ISODateString;
-  allDay: boolean;
+  allDay?: boolean;
 }
 export interface CalendarTask extends CalendarEventBase {
   days: number;

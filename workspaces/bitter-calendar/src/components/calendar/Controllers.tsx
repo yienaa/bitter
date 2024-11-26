@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { colors } from '../../../styles/theme';
+import { theme } from '../../../styles/theme';
 import Button from '../../ui/Button';
 import { UI_COLOR, UI_VARIANT } from '../../types/style';
 import { TodayContext } from '../../contexts/TodayContext';
@@ -13,7 +13,7 @@ const ControllButtons = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: 1px solid ${theme.colors.gray[300]};
 `;
 
 const ButtonGroup = styled.div`
@@ -50,7 +50,8 @@ export default function Controllers(): React.ReactElement {
   return (
     <ControllButtons>
       <Button
-        label='오늘'
+        variant="outlined"
+        label="오늘"
         onClick={goToday}
       />
       <ButtonGroup>
